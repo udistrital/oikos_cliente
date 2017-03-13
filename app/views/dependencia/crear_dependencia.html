@@ -1,0 +1,56 @@
+<div class="jumbotron">
+
+  <div class="panel panel-success panel-body">
+    <!--Titulo-->
+    <h1 class="panel-title page-header text-center">Registrar dependencia</h1><br><br>
+    <div class="container">
+      <form class="form-horizontal" name="crearDependencia" novalidate>
+
+        <!--Campo para el nombre del edificio-->
+        <div class="col-md-12 row line">
+          <div class="col-sm-2">
+            <label><h5><strong>Nombre:</strong><h5></label>
+          </div>
+          <div class="col-sm-10">
+            <input class="form-control" ng-model="aplicacion.nombre" placeholder="Ingrese el nombre de la dependencia" required>
+            </input>
+          </div>
+        </div>
+
+        <!--Campo para el código del edificio-->
+        <div class="col-md-12 row line">
+          <div class="col-sm-2">
+            <label><h5><strong>Télefono:</strong><h5></label>
+          </div>
+          <div class="col-sm-10">
+            <input  class="form-control" ng-model="aplicacion.descripcion" placeholder="Ingrese el télefono de la dependencia" required>
+          </input>
+          </div>
+        </div>
+
+        <!--Campo que permite seleccionar el estado de un edificio-->
+          <div class="col-md-12 row line">
+          <div class="col-sm-2">
+            <label><h5><strong>Estado:</strong><h5></label>
+            </div>
+            <div class="col-sm-10">
+              <select  class="form-control" ng-model="perfil.permiso" required>
+                  <option value="">--Elija el estado que tiene el edificio--</option>
+                  <option value="Activo">Activo</OPTION>
+                  <option value="Inactivo">Inactivo</OPTION>
+              </select>
+            </div>
+          </div>
+
+        <br>
+        <div class="col-md-12 text-center row line">
+          <div class="col-sm-6">
+            <input type="submit" class="btn btn-lg btn-primary" value="Confirmar" ng-click="confirmar()">
+          </div>
+          <div class="col-sm-6">
+            <button class="btn btn-lg btn-danger" type="reset" ng-click="reset(crearApp)">Cancelar</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
