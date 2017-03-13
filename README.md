@@ -6,6 +6,7 @@ version 0.0.16.
 ## Instalación dependencias
 
 Por favor cuando clone el repositorio ejecutar los siguientes comandos
+
 1. npm install
 2. bower install
 
