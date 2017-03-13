@@ -6,8 +6,8 @@ version 0.0.16.
 ## Instalación dependencias
 
 Por favor cuando clone el repositorio ejecutar los siguientes comandos
--- npm install
--- bower install
+... npm install
+... bower install
 
 Por favor seleccionar la versión más reciente de angular
 
