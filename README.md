@@ -12,7 +12,7 @@ Por favor cuando clone el repositorio ejecutar los siguientes comandos
 Por favor seleccionar la versión más reciente de angular
 
 ## Build & development
-Para construir el proyecto ejecute el comando grunt build
+Para construir el proyecto ejecute el comando `grunt build`
 
 ## Testing
 
