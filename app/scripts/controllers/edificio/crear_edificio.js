@@ -8,18 +8,17 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearEdificioCtrl', function (oikosRequest) {
+  .controller('CrearEdificioCtrl', function (oikosRequest, $scope) {
 
-    //Se crea la variable self
-    var self = this;
-    self.edificio = {};
+    //Se crea la variable $scope
+    $scope.edificio = {};
 
     /*Función para insertar edificios*/
-    self.confirmar = function() {
+    $scope.confirmar = function() {
         var json = {
-          "Nombre": self.edificio.nombre,
-          "Codigo": self.edificio.descripcion,
-          "Estado": self.edificio.dominio
+          "Nombre": $scope.edificio.nombre,
+          "Codigo": $scope.edificio.descripcion,
+          "Estado": $scope.edificio.dominio
         };
 
         //Registrar Edificio
@@ -27,13 +26,13 @@ angular.module('oikosClienteApp')
           .then(function() {
             alert("Guardo exitosamente");
             //Limpia los campos despues de hacer una inserción
-            self.edificio = {};
+            $scope.edificio = {};
           });
       }
 
       /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
-      self.reset = function(form) {
-        self.edificio = {};
+      $scope.reset = function(form) {
+        $scope.edificio = {};
         if (form) {
           form.$setPristine();
           form.$setUntouched();
