@@ -8,7 +8,7 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('ConsultarSedeCtrl', function (oikosRequest) {
+  .controller('ConsultarSedeCtrl', function (oikosRequest, uiGridConstants) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
@@ -23,7 +23,11 @@ angular.module('oikosClienteApp')
       columnDefs: [
         {
           field: 'Nombre',
-          cellTemplate: tmpl
+          cellTemplate: tmpl,
+          sort: {
+            direction: uiGridConstants.ASC,
+            priority: 1
+          }
         },
         {
           field: 'Codigo',

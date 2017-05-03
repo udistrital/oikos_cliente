@@ -8,12 +8,15 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('ConsultarDependenciaCtrl', function ($scope, oikosRequest, uiGridConstants) {
+  .controller('ConsultarDependenciaCtrl', function (oikosRequest, uiGridConstants) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
+    //Se utiliza la variable self estandarizada
+    var self=this;
+
     //Creación tabla
-    $scope.gridOptions1 = {
+    self.gridOptions1 = {
       enableSorting: true,
       enableFiltering: true,
       resizable: true,
@@ -48,29 +51,29 @@ angular.module('oikosClienteApp')
         limit: 0
       }))
       .then(function(response) {
-        $scope.gridOptions1.data = response.data;
+        self.gridOptions1.data = response.data;
       });
 
     //Función para actualizar la información de una aplicación
-    $scope.actualizar = function(row) {
+    self.actualizar = function(row) {
       //El index indica la posición en la grilla
-      var index = $scope.gridOptions1.data.indexOf(row.entity);
+      var index = self.gridOptions1.data.indexOf(row.entity);
       //Permite que la fila del index, sea editable
-      $scope.gridOptions1.data[index].editable = !$scope.gridOptions1.data[index].editable;
+      self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
 
       console.log("Entro a editar");
 
       var jsonActualizado = row.entity;
-      oikosRequest.put('dependencia', $scope.gridOptions1.Id, jsonActualizado)
+      oikosRequest.put('dependencia', self.gridOptions1.Id, jsonActualizado)
         .then(function(response) {
-          $scope.ServerResponse = response.data;
+          self.ServerResponse = response.data;
         })
 
     };
 
     //Función para borrar un registro de la tabla dependencia
-    $scope.deleteRow = function(row) {
-      var index = $scope.gridOptions1.data.indexOf(row.entity);
+    self.deleteRow = function(row) {
+      var index = self.gridOptions1.data.indexOf(row.entity);
 
       //Borra la dependencia de la BD
       oikosRequest.delete('dependencia', row.entity.Id)
@@ -83,7 +86,7 @@ angular.module('oikosClienteApp')
                 limit: 0
               }))
               .then(function(response) {
-                $scope.gridOptions1.data = response.data;
+                self.gridOptions1.data = response.data;
               });
           } else {
             alert("No se puede borrar la dependencia");
@@ -93,8 +96,8 @@ angular.module('oikosClienteApp')
 
 
     /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
-    $scope.reset = function(form) {
-      $scope.dependencia = {};
+    self.reset = function(form) {
+      self.dependencia = {};
       if (form) {
         form.$setPristine();
         form.$setUntouched();
