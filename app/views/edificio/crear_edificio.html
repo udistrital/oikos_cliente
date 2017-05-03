@@ -1,56 +1,55 @@
-<div class="jumbotron">
+<div class="panel panel-primary panel-body">
+  <!--Cabecera del panel-->
+  <h2 class="page-header text-center">Edificio</h2>
+  <!--Panel de registro-->
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title">Registrar Edificio</h3>
+      </div>
+      <div class="panel-body">
+        <!--Formulario de registro-->
+        <form name="formedificio" ng-submit="formedificio.$valid && crearEdificio.crear_edificio()">
+          <!--Campo de registro de nombre-->
+          <fieldset class="form-group">
+            <label for="nombreedificio">Nombre:</label>
+            <input type="text" class="form-control" id="nombreedificio" placeholder="Ingresa el nombre de la edificio" ng-model="crearEdificio.nuevo_edificio.Nombre" maxlength="120" required>
+          </fieldset>
+          <!--Campo de registro de código-->
+          <fieldset class="form-group">
+            <label for="codigoedificio">Código:</label>
+            <input type="text" class="form-control" id="codigoedificio" placeholder="Ingresa el código correspondiente al edificio" ng-model="crearEdificio.nuevo_edificio.Codigo" maxlength="30" required>
+          </fieldset>
+          <!--ComboBox de registro de estado-->
+          <fieldset class="form-group">
+            <label for="unidadplan">Estado:</label>
+            <select  class="form-control" ng-model="crearEdificio.nuevo_edificio.estado" required>
+                      <option value="">--Elija el estado que tendrá la edificio--</option>
+                      <option value="Activo">Activo</OPTION>
+                      <option value="Inactivo">Inactivo</OPTION>
+           </select>
+         </fieldset>
+         <!--Boton para enviar datos al formulario-->
+          <button type="submit" class="btn btn-outline btn-primary">Confirmar </button>
+        </form>
 
-  <div class="panel panel-success panel-body">
-    <!--Titulo-->
-    <h1 class="panel-title page-header text-center">Registrar edificio</h1><br><br>
-    <div class="container">
-      <form class="form-horizontal" name="crearEdificio" novalidate>
-
-        <!--Campo para el nombre del edificio-->
-        <div class="col-md-12 row line">
-          <div class="col-sm-2">
-            <label><h5><strong>Nombre:</strong><h5></label>
-          </div>
-          <div class="col-sm-10">
-            <input class="form-control" ng-model="aplicacion.nombre" placeholder="Ingrese el nombre del edificio" required>
-            </input>
-          </div>
-        </div>
-
-        <!--Campo para el código del edificio-->
-        <div class="col-md-12 row line">
-          <div class="col-sm-2">
-            <label><h5><strong>Código:</strong><h5></label>
-          </div>
-          <div class="col-sm-10">
-            <input  class="form-control" ng-model="aplicacion.descripcion" placeholder="Ingrese el código del edificio" required>
-          </input>
-          </div>
-        </div>
-
-        <!--Campo que permite seleccionar el estado de un edificio-->
-          <div class="col-md-12 row line">
-          <div class="col-sm-2">
-            <label><h5><strong>Estado:</strong><h5></label>
-            </div>
-            <div class="col-sm-10">
-              <select  class="form-control" ng-model="perfil.permiso" required>
-                  <option value="">--Elija el estado que tiene el edificio--</option>
-                  <option value="Activo">Activo</OPTION>
-                  <option value="Inactivo">Inactivo</OPTION>
-              </select>
-            </div>
-          </div>
-
-        <br>
-        <div class="col-md-12 text-center row line">
-          <div class="col-sm-6">
-            <input type="submit" class="btn btn-lg btn-primary" value="Confirmar" ng-click="confirmar()">
-          </div>
-          <div class="col-sm-6">
-            <button class="btn btn-lg btn-danger" type="reset" ng-click="reset(crearApp)">Cancelar</button>
-          </div>
-        </div>
-      </form>
+      </div>
     </div>
+  </div>
+
+  <!--Panel para elegir espacios físicos asociados al edificio-->
+  <div class="col-md-6">
+    <div class="panel panel-default">
+      <!--Cabecera del panel de selección-->
+      <div class="panel-heading">
+        <h3 class="panel-title">Espacios Físicos Del Edificio</h3>
+      </div>
+      <div class="panel-body">
+          <p>Por favor seleccione los espacios físicos que le pertenecen al edificio.</p>
+          <div class="panel-body">
+            <!--Tabla de selección de espacios físicos-->
+            <div style="height: {{gridHeight}}px;" ui-grid="crearEdificio.gridOptions_espacios_fisicos" ui-grid-selection ui-grid-auto-resize></div>
+          </div>
+      </div>
+  </div>
   </div>

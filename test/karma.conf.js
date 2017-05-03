@@ -44,6 +44,7 @@ module.exports = function(config) {
       'bower_components/angular-input-masks/angular-input-masks-standalone.js',
       'bower_components/moment/moment.js',
       'bower_components/angular-moment/angular-moment.js',
+      'bower_components/sweetalert2/dist/sweetalert2.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

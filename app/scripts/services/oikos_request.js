@@ -12,7 +12,7 @@ angular.module('oikosClienteApp')
 
       // Service logic
     // ...
-    var path = "http://127.0.0.1:8081/v1/";
+    var path = "http://127.0.0.1:8080/v1/";
     // Public API here
     return {
       get: function (tabla,params) {
@@ -28,18 +28,4 @@ angular.module('oikosClienteApp')
         return $http.delete(path+tabla+"/"+id);
       }
     };
-
-
-    /*
-    // Service logic
-    // ...
-
-    var meaningOfLife = 42;
-
-    // Public API here
-    return {
-      someMethod: function () {
-        return meaningOfLife;
-      }
-    };*/
   });
