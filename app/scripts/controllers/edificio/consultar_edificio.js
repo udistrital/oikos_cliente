@@ -10,7 +10,7 @@
 angular.module('oikosClienteApp')
   .controller('ConsultarEdificioCtrl', function (oikosRequest) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
-   var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
+   //var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
    //Creación tabla
    self.gridOptions1 = {
@@ -19,17 +19,17 @@ angular.module('oikosClienteApp')
      resizable: true,
      columnDefs: [
        {
-         field: 'Nombre',
-         cellTemplate: tmpl
+         field: 'Nombre'
+
        },
        {
          field: 'Codigo',
-         cellTemplate: tmpl,
+
          displayName: 'Código'
        },
        {
          field: 'Estado',
-         cellTemplate: tmpl
+
        },
        {
          field: 'Acciones',
@@ -38,15 +38,16 @@ angular.module('oikosClienteApp')
      ]
    };
 
-   //Función que obtiene todas las aplicaciones
+   //Función que obtiene todos los edificios
    oikosRequest.get('espacio_fisico', $.param({
+       query: "TipoEspacio:2",
        limit: 0
      }))
      .then(function(response) {
        self.gridOptions1.data = response.data;
      });
 
-   //Función para actualizar la información de una aplicación
+   //Función para actualizar la información de un edificio
    self.actualizar = function(row) {
      //El index indica la posición en la grilla
      var index = self.gridOptions1.data.indexOf(row.entity);
@@ -76,6 +77,7 @@ angular.module('oikosClienteApp')
            alert("La aplicacion se ha borrado exitosamente");
            //Función que obtiene todas las aplicaciones
            oikosRequest.get('espacio_fisico', $.param({
+               query: "TipoEspacio:2",
                limit: 0
              }))
              .then(function(response) {

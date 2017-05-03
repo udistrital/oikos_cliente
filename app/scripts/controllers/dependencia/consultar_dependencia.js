@@ -8,7 +8,7 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('ConsultarDependenciaCtrl', function () {
+  .controller('ConsultarDependenciaCtrl', function ($scope, oikosRequest) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
@@ -23,12 +23,12 @@ angular.module('oikosClienteApp')
           cellTemplate: tmpl
         },
         {
-          field: 'Descripcion',
+          field: 'TelefonoDependencia',
           cellTemplate: tmpl,
           displayName: 'Teléfono'
         },
         {
-          field: 'Correo',
+          field: 'CorreoElectronico',
           cellTemplate: tmpl,
           displayName: 'Correo Electrónico'
         },
@@ -68,7 +68,7 @@ angular.module('oikosClienteApp')
     $scope.deleteRow = function(row) {
       var index = $scope.gridOptions1.data.indexOf(row.entity);
 
-      //Borra la aplicación de la BD
+      //Borra la dependencia de la BD
       oikosRequest.delete('dependencia', row.entity.Id)
         .then(function(response) {
           //Condicional

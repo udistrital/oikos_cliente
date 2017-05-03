@@ -8,31 +8,44 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearEspacioFisicoCtrl', function (oikosRequest, $scope) {
+  .controller('CrearEspacioFisicoCtrl', function (oikosRequest) {
+    //Se utiliza la variable self estandarizada
+    var self=this;
+    //Se crea JSON para la nuevo_espacio_fisico
+    self.nuevo_espacio = {};
+    self.nuevo_espacio.TipoEspacio = {Id:3};
 
-      /*Función para insertar espacios fisicos*/
-      $scope.confirmar = function() {
-        var json = {
-          "Nombre": $scope.espacio_fisico.nombre,
-          "Codigo": $scope.espacio_fisico.telefono,
-          "Correo": $scope.espacio_fisico.correo
-        };
+    //Creación tabla que carga espacios_fisicos
+     self.gridOptions_espacios_fisicos = {
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        enableSelectAll: true,
+        columnDefs: [
+          { field: 'Nombre'},
+          { field: 'Codigo'}
+     ],
+   };
 
-        //Registrar Espacio Físico
-        oikosRequest.post('espacio_fisico', json)
-          .then(function() {
-            alert("Guardo exitosamente");
-            //Limpia los campos despues de hacer una inserción
-            $scope.espacio_fisico = {};
-          });
-      }
+    //Función obtener los espacios_fisicos
+    oikosRequest.get('espacio_fisico', $.param({
+       query: "TipoEspacio:3"
+    }))
+    .then(function(response) {
+       self.gridOptions_espacios_fisicos.data = response.data;
+    });
 
-      /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
-      $scope.reset = function(form) {
-        $scope.espacio_fisico = {};
-        if (form) {
-          form.$setPristine();
-          form.$setUntouched();
-        }
-      };
+    //Función para crear un espacio fisico
+    self.crear_espacio_fisico=function(form){
+      console.log(self.nuevo_espacio_fisico);
+      oikosRequest.post("espacio_fisico", self.nuevo_espacio_fisico).then(function(response){
+        //Notificación de success
+        swal("", "Se agregó con éxito el espacio físico <b>" + self.nuevo_espacio.Nombre + "</b> con código <b>" +
+        self.nuevo_espacio.Codigo + "</b>", "success");
+
+        //Reinicia las variables y restablece el formulario
+        self.nuevo_espacio_fisico={};
+        form.$setPristine();
+        form.$setUntouched();
+      });
+  };
   });

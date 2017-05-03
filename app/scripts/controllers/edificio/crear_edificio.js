@@ -8,34 +8,45 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearEdificioCtrl', function (oikosRequest, $scope) {
+  .controller('CrearEdificioCtrl', function (oikosRequest) {
 
-    //Se crea la variable $scope
-    $scope.edificio = {};
+    //Se utiliza la variable self estandarizada
+    var self=this;
+    //Se crea JSON para el nuevo_edificio
+    self.nuevo_edificio = {};
+    self.nuevo_edificio.TipoEspacio = {Id:2};
 
-    /*Función para insertar edificios*/
-    $scope.confirmar = function() {
-        var json = {
-          "Nombre": $scope.edificio.nombre,
-          "Codigo": $scope.edificio.descripcion,
-          "Estado": $scope.edificio.dominio
-        };
+    //Creación tabla que carga edificios
+     self.gridOptions_espacios_fisicos = {
+        enableRowSelection: true,
+        enableRowHeaderSelection: true,
+        enableSelectAll: true,
+        columnDefs: [
+          { field: 'Nombre'},
+          { field: 'Codigo', displayName: 'Código'}
+     ],
+   };
 
-        //Registrar Edificio
-        oikosRequest.post('espacio_fisico', json)
-          .then(function() {
-            alert("Guardo exitosamente");
-            //Limpia los campos despues de hacer una inserción
-            $scope.edificio = {};
-          });
-      }
+    //Función obtener los edificios
+    oikosRequest.get('espacio_fisico', $.param({
+       query: "TipoEspacio:3",
+       limit: 0
+    }))
+    .then(function(response) {
+       self.gridOptions_espacios_fisicos.data = response.data;
+    });
 
-      /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
-      $scope.reset = function(form) {
-        $scope.edificio = {};
-        if (form) {
-          form.$setPristine();
-          form.$setUntouched();
-        }
+    console.log(self.nuevo_edificio);
+    //Función para crear el edificio
+    self.crear_edificio=function(form){
+      console.log(self.nuevo_edificio);
+      //Notificación de success
+      swal("", "Se agregó con éxito el edificio <b>" + self.nuevo_edificio.Nombre + "</b> con código <b>" +
+      self.nuevo_edificio.Codigo + "</b>", "success");
+
+        //Reinicia las variables y restablece el formulario
+        self.nuevo_edificio={};
+        form.$setPristine();
+        form.$setUntouched();
       };
   });
