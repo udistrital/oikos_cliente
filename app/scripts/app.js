@@ -52,11 +52,6 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/edificio', {
-        templateUrl: 'views/edificio.html',
-        controller: 'EdificioCtrl',
-        controllerAs: 'edificio'
-      })
       .when('/crear_edificio', {
         templateUrl: 'views/edificio/crear_edificio.html',
         controller: 'CrearEdificioCtrl',
