@@ -1,12 +1,13 @@
-<!--Vista para consultar los dependencia-->
+<!--Vista para consultar las dependencias-->
   <div class="panel panel-default">
     <div class="panel-heading">
-      <strong><center>Consultar dependencia</center></strong>
+      <strong><center>Consultar Dependencias</center></strong>
     </div>
     <div class="panel-body">
-      <div id="grid1" ui-grid="gridOptions1" align='center'></div>
+      <div style="height: {{gridHeight}}px;" ui-grid="consultarDependencia.gridOptions1" align='center' ui-grid-auto-resize></div>
+    </div>
     </div>
     <div class="panel-footer">
-      Las dependencias que se han registrado se visualizan en esta tabla.
+      Los edificios que se han registrado se visualizan en esta tabla.
     </div>
   </div>
