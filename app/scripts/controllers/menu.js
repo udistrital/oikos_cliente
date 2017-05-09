@@ -13,78 +13,15 @@ angular.module('oikosClienteApp')
     $scope.actual = "";
     $scope.token_service = token_service;
     $scope.breadcrumb = [];
-    $scope.menu_service = [
-      { //aqui va el servicio de el app de configuracion
-          "Id": 2,
-          "Nombre": "Sede",
-          "Url": "",
-          "Opciones": [{
-              "Id": 3,
-              "Nombre": "Registrar sede",
-              "Url": "crear_sede",
-              "Opciones": null
-              },
-            {
-              "Id": 4,
-              "Nombre": "Consultar sede",
-              "Url": "consultar_sede",
-              "Opciones": null
-            }]
-          },
-          {
-            "Id": 5,
-            "Nombre": "Edificio",
-            "Url": "",
-            "Opciones": [{
-                "Id": 6,
-                "Nombre": "Registrar edificio",
-                "Url": "crear_edificio",
-                "Opciones": null
-                },
-              {
-                "Id": 7,
-                "Nombre": "Consultar edificio",
-                "Url": "consultar_edificio",
-                "Opciones": null
-              }]
-            },
-            {
+    //Variable que contiene el arreglo de los JSON, con los menus respectivos
+    $scope.menu_service = [];
 
-                "Id": 8,
-                "Nombre": "Espacio físico",
-                "Url": "",
-                "Opciones": [{
-                    "Id": 9,
-                    "Nombre": "Registrar espacio físico",
-                    "Url": "crear_espacio_fisico",
-                    "Opciones": null
-                    },
-                  {
-                    "Id": 10,
-                    "Nombre": "Consultar espacio físico",
-                    "Url": "consultar_espacio_fisico",
-                    "Opciones": null
-                  }]
-                },
-                    {
-
-                    "Id": 11,
-                    "Nombre": "Dependencia",
-                    "Url": "",
-                    "Opciones": [{
-                        "Id": 12,
-                        "Nombre": "Registrar dependencia",
-                        "Url": "crear_dependencia",
-                        "Opciones": null
-                        },
-                      {
-                        "Id": 13,
-                        "Nombre": "Consultar dependencia",
-                        "Url": "consultar_dependencia",
-                        "Opciones": null
-                      }]
-                    }
-      ];
+    $http.get('http://10.20.0.254/configuracion_api/v1/menu_opcion_padre/ArbolMenus/Admin Oikos')
+       .then(function(response) {
+          $scope.menu_service = response.data;
+          recorrerArbol($scope.menu_service, "");
+          update_url();
+    });
 
     var recorrerArbol = function(item, padre) {
       var padres = "";
