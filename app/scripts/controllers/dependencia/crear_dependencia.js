@@ -8,7 +8,7 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearDependenciaCtrl', function (oikosRequest) {
+  .controller('CrearDependenciaCtrl', function (oikosRequest, $window) {
     //Se utiliza la variable self estandarizada
     var self=this;
     //Se crea JSON para la nueva_dependencia
@@ -39,14 +39,26 @@ angular.module('oikosClienteApp')
       //Petición POST
       oikosRequest.post("dependencia", self.nueva_dependencia).then(function(response){
         //Notificación de success
-        swal("", "Se agregó con éxito la sede <b>" + self.nueva_dependencia.Nombre + "</b> con télefono <b>" +
-        self.nueva_dependencia.Telefono + "</b>", "success");
-
-        //Reinicia las variables y restablece el formulario
-        self.nueva_dependencia={};
-        form.$setPristine();
-        form.$setUntouched();
+        swal({
+          html: "<label>Se insertó correctamente la dependencia con los siguientes datos</label><br><br><label><b>Nombre:</b></label> "
+          + self.nueva_dependencia.Nombre+"<br><label><b>Télefono:</b></label> " + self.nueva_dependencia.Telefono +
+          "<br><label><b>Correo electrónico:</b></label>" + self.nueva_dependencia.Correo,
+          type: "success",
+          showCancelButton: true,
+          confirmButtonColor: "#449D44",
+          cancelButtonColor: "#C9302C",
+          confirmButtonText: "Consultar dependencia",
+          cancelButtonText: "Registrar nueva dependencia",
+        }).then(function() {
+              //Si da click lo redirije a consultar dependencias
+              $window.location.href = '#/consultar_dependencia';
+            }, function(dismiss) {
+              //Si da click lo redirije a crear_dependencia
+              if (dismiss === 'cancel') {
+                /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
+                $window.location.href = '#/crear_dependencia';
+              }
+            })
       });
   };
-
   });

@@ -40,7 +40,7 @@ angular.module('oikosClienteApp')
         },
         {
           field: 'Acciones',
-          cellTemplate: '<button class="btn btn-danger btn-circle" ng-click="grid.appScope.deleteRow(row)"><i class="glyphicon glyphicon-trash"></i></button>&nbsp;<button type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.actualizar(row)"><i class="glyphicon glyphicon-pencil"></i></button>'
+          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.deleteRow(row)"><i class="fa fa-times"></i></button>&nbsp;<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.actualizar(row)"><i class="glyphicon glyphicon-pencil"></i></button>'
         }
       ]
     };

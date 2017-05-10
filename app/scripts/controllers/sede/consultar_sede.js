@@ -8,40 +8,58 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('ConsultarSedeCtrl', function (oikosRequest, uiGridConstants) {
+  .controller('ConsultarSedeCtrl', function(oikosRequest, uiGridConstants) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
     //Se utiliza la variable self estandarizada
-    var self=this;
+    var self = this;
 
     //Creación tabla
     self.gridOptions1 = {
       enableSorting: true,
       enableFiltering: true,
       resizable: true,
-      columnDefs: [
-        {
+      columnDefs: [{
           field: 'Nombre',
           cellTemplate: tmpl,
           sort: {
             direction: uiGridConstants.ASC,
             priority: 1
           }
+
         },
         {
           field: 'Codigo',
           cellTemplate: tmpl,
-          displayName: 'Código'
+          displayName: 'Código',
+          width: "10%"
         },
         {
           field: 'Estado',
-          cellTemplate: tmpl
+          width: "15%",
+          enableCellEdit: false
+
         },
         {
           field: 'Acciones',
-          cellTemplate: '<button class="btn btn-danger btn-circle" ng-click="grid.appScope.deleteRow(row)"><i class="glyphicon glyphicon-trash"></i></button>&nbsp;<button type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.actualizar(row)"><i class="glyphicon glyphicon-pencil"></i></button>'
+          width: "15%",
+          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarSede.deleteRow(row)">' +
+          '<i class="fa fa-times"></i></button>&nbsp;' +
+          '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarSede.actualizar(row)">' +
+          '<i class="glyphicon glyphicon-pencil"></i></button>'
+
+          /*Para incluir funcionalidad de nuevos botnos y hacer llamado de modal
+          '<center>' +
+            '<a class="ver" ng-click="grid.appScope.d_opListarTodas.op_detalle(row,\'ver\')" >' +
+            '<i class="fa fa-eye fa-lg" aria-hidden="true" data-toggle="tooltip" title=""></i></a> ' +
+            '<a class="editar" ng-click="grid.appScope.TiposAvance.load_row(row,\'edit\');" data-toggle="modal" data-target="#myModal">' +
+            '<i data-toggle="tooltip" title="" class="fa fa-cog fa-lg" aria-hidden="true"></i></a> ' +
+            '<a class="borrar" ng-click="grid.appScope.TiposAvance.load_row(row,\'delete\');" data-toggle="modal" data-target="#myModal">' +
+            '<i data-toggle="tooltip" title="" class="fa fa-trash fa-lg" aria-hidden="true"></i></a>' +
+            '</center>',*/
         }
+
       ]
     };
 
@@ -74,25 +92,47 @@ angular.module('oikosClienteApp')
     //Función para borrar un registro de la tabla
     self.deleteRow = function(row) {
       var index = self.gridOptions1.data.indexOf(row.entity);
+      //Alerta de cambiar el estado
+      swal({
+          title: 'Esta seguro de inactivar la sede?',
+          text: "No puedes revertir esta opción!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, inactivar sede!',
+          cancelButtonText: 'No, cancelar!',
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+          buttonsStyling: false
+        }).then(function () {
 
-      //Borra la aplicación de la BD
-      oikosRequest.delete('espacio_fisico', row.entity.Id)
-        .then(function(response) {
-          //Condicional
-          if (response.data === "OK") {
-            //self.gridOptions1.data.splice(index, 1); Sirve para hacer el borrado desde la vista
-            alert("La sede se ha borrado exitosamente");
-            //Función que obtiene todas las sedes
-            oikosRequest.get('espacio_fisico', $.param({
-                limit: 0
-              }))
-              .then(function(response) {
-                self.gridOptions1.data = response.data;
-              });
-          } else {
-            alert("No se puede borrar la sede");
+          //Variable que cambia el estado
+          row.entity.Estado = 'Inactivo';
+          //Variable que contiene el estado Inactivo
+          var cambio_estado = row.entity.Estado;
+          //Inactiva la sede de la BD
+          oikosRequest.put('espacio_fisico', row.entity.Id, cambio_estado)
+            .then(function(response) {
+              console.log(cambio_estado);
+                swal(
+                  'Inactivada!',
+                  'La sede ha sido inactivada exitosamente.',
+                  'success'
+                )
+            });
+        }, function (dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+            swal(
+              'Cancelado',
+              'La sede mantiene su estado "Activo"',
+              'error'
+            )
           }
-        });
+        })
+
     };
 
 
@@ -104,5 +144,5 @@ angular.module('oikosClienteApp')
         form.$setUntouched();
 
       }
-};
+    };
   });

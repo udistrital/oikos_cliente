@@ -56,7 +56,7 @@ angular.module('oikosClienteApp')
 
     //Función para actualizar la información de una aplicación
     self.actualizar = function(row) {
-      //El index indica la posición en la grilla
+      //El index indica la posición en la grillas
       var index = self.gridOptions1.data.indexOf(row.entity);
       //Permite que la fila del index, sea editable
       self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
