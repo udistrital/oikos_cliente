@@ -125,7 +125,7 @@ angular.module('oikosClienteApp')
           if (dismiss === 'cancel') {
             swal(
               'Cancelado',
-              'La sede mantiene su estado "Activo"',
+              'Se cancelo la acción',
               'error'
             )
           }
