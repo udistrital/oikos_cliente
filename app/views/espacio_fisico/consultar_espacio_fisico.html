@@ -5,6 +5,11 @@
       <strong><center>Consultar espacios físicos</center></strong>
     </div>
     <div class="panel-body">
+      <label for="filtroTipoEspacio">Tipo Espacio:</label>
+      <select class="form-control"  ng-model="consultarEspacioFisico.filtro" ng-options="option.Nombre for option in consultarEspacioFisico.tipo_espacio" ng-click="consultarEspacioFisico.cargar_tipo()">
+              <option value="">--Elija el tipo de espacio físico a consultar--</option>
+      </select><br>
+     <!--Div para la tabla -->
       <div id="grid1" ui-grid="consultarEspacioFisico.gridOptions1" align='center'></div>
     </div>
     <div class="panel-footer">
