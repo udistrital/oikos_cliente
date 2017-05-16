@@ -44,7 +44,7 @@ angular.module('oikosClienteApp')
         {
           field: 'Acciones',
           width: "15%",
-          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarSede.deleteRow(row)">' +
+          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarSede.inactivarSede(row)">' +
           '<i class="fa fa-times"></i></button>&nbsp;' +
           '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarSede.actualizar(row)">' +
           '<i class="glyphicon glyphicon-pencil"></i></button>'
@@ -90,7 +90,7 @@ angular.module('oikosClienteApp')
     };
 
     //Función para borrar un registro de la tabla
-    self.deleteRow = function(row) {
+    self.inactivarSede = function(row) {
       var index = self.gridOptions1.data.indexOf(row.entity);
       //Alerta de cambiar el estado
       swal({
@@ -109,10 +109,8 @@ angular.module('oikosClienteApp')
 
           //Variable que cambia el estado
           row.entity.Estado = 'Inactivo';
-          //Variable que contiene el estado Inactivo
-          var cambio_estado = row.entity.Estado;
           //Inactiva la sede de la BD
-          oikosRequest.put('espacio_fisico', row.entity.Id, cambio_estado)
+          oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
             .then(function(response) {
               console.log(cambio_estado);
                 swal(
