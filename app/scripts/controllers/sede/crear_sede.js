@@ -8,45 +8,68 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearSedeCtrl', function (oikosRequest) {
+  .controller('CrearSedeCtrl', function(oikosRequest, $window) {
     //Se utiliza la variable self estandarizada
-    var self=this;
+    var self = this;
     //Se crea JSON para la nueva_sede
     self.nueva_sede = {};
-    self.nueva_sede.TipoEspacio = {Id:1};
+    self.nueva_sede.TipoEspacio = {
+      Id: 1
+    };
 
     //Creación tabla que carga edificios
-     self.gridOptions_edificios = {
-        enableRowSelection: true,
-        enableRowHeaderSelection: true,
-        enableSelectAll: true,
-        columnDefs: [
-          { field: 'Nombre'},
-          { field: 'Codigo'}
-     ],
-   };
+    self.gridOptions_edificios = {
+      enableRowSelection: true,
+      enableRowHeaderSelection: true,
+      enableSelectAll: true,
+      columnDefs: [{
+          field: 'Nombre'
+        },
+        {
+          field: 'Codigo'
+        }
+      ],
+    };
 
     //Función obtener los edificios
     oikosRequest.get('espacio_fisico', $.param({
-       query: "TipoEspacio:2"
-    }))
-    .then(function(response) {
-       self.gridOptions_edificios.data = response.data;
-    });
+        query: "TipoEspacio:2"
+      }))
+      .then(function(response) {
+        self.gridOptions_edificios.data = response.data;
+      });
 
     //Función para crear la sede
-    self.crear_sede=function(form){
-      console.log(self.nueva_sede);
-      //Petición POST
-      oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response){
-        //Notificación de success
-        swal("", "Se agregó con éxito la sede <b>" + self.nueva_sede.Nombre + "</b> con código <b>" +
-        self.nueva_sede.Codigo + "</b>", "success");
+    self.crear_sede = function(form) {
 
-        //Reinicia las variables y restablece el formulario
-        self.nueva_sede={};
-        form.$setPristine();
-        form.$setUntouched();
+      //Convertir a mayusculas
+      self.nueva_sede.Nombre = self.nueva_sede.Nombre.toUpperCase();
+      self.nueva_sede.Codigo = self.nueva_sede.Codigo.toUpperCase();
+
+      //Petición POST
+      oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
+        //Notificación de success
+        swal({
+          title: "Registro exitoso",
+          html: "<label>Se insertó correctamente la sede con los siguientes datos</label><br><br><label><b>Nombre:</b></label> " +
+            self.nueva_sede.Nombre + "<br><label><b>Código:</b></label> " + self.nueva_sede.Codigo,
+          type: "success",
+          showCancelButton: true,
+          confirmButtonColor: "#449D44",
+          cancelButtonColor: "#2c6bc9",
+          confirmButtonText: "Registrar nueva sede",
+          cancelButtonText: "Consultar sede",
+        }).then(function() {
+            //Si da click lo redirije a crear nueva dependencia
+            $window.location.reload();
+          },
+          function(dismiss) {
+            //Si da click lo redirije a consultar sede
+            if (dismiss === 'cancel') {
+              /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
+              $window.location.href = '#/consultar_sede';
+            }
+          })
       });
-  };
-});
+    };
+  });
