@@ -15,6 +15,21 @@ angular.module('oikosClienteApp')
   //Se utiliza la variable self estandarizada
   var self = this;
 
+  //Variable que sirve de filtro para la tabla
+  self.filtro ={};
+
+  //Variable que contiene todos los tipos de espacios físicos
+  self.tipo_espacio = {};
+
+  //Función que obtiene todas los tipos de espacio
+  oikosRequest.get('tipo_espacio_fisico', $.param({
+      limit: 0,
+      offset: 3
+    }))
+    .then(function(response) {
+      self.tipo_espacio = response.data;
+    });
+
   //Creación tabla
   self.gridOptions1 = {
     enableSorting: true,
@@ -63,75 +78,81 @@ angular.module('oikosClienteApp')
     ]
   };
 
-  //Función que obtiene todas las espacio_fisicoes
-  oikosRequest.get('espacio_fisico', $.param({
-      query: "TipoEspacio:3",
-      limit: 0
-    }))
-    .then(function(response) {
-      self.gridOptions1.data = response.data;
-    });
 
-  //Función para actualizar la información de una aplicación
-  self.actualizar = function(row) {
-    //El index indica la posición en la grilla
-    var index = self.gridOptions1.data.indexOf(row.entity);
-    //Permite que la fila del index, sea editable
-    self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
 
-    console.log("Entro a editar");
-
-    var jsonActualizado = row.entity;
-    oikosRequest.put('espacio_fisico', self.gridOptions1.Id, jsonActualizado)
-      .then(function(response) {
-        self.ServerResponse = response.data;
-      })
-
-  };
-
-  //Función para borrar un registro de la tabla
-  self.inactivarSede = function(row) {
-    var index = self.gridOptions1.data.indexOf(row.entity);
-    //Alerta de cambiar el estado
-    swal({
-        title: 'Esta seguro de inactivar la sede?',
-        text: "No puedes revertir esta opción!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, inactivar sede!',
-        cancelButtonText: 'No, cancelar!',
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
-        buttonsStyling: false
-      }).then(function () {
-
-        //Variable que cambia el estado
-        row.entity.Estado = 'Inactivo';
-        //Inactiva la sede de la BD
-        oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
+      //Función que carga de acuerdo al ID del tipo_espacio
+      self.cargar_tipo = function(){
+        //Función que obtiene todas las espacio_fisicos
+        oikosRequest.get('espacio_fisico', $.param({
+            query: "TipoEspacio:" + self.filtro.Id + "",
+            limit: 0
+          }))
           .then(function(response) {
-            console.log(cambio_estado);
-              swal(
-                'Inactivada!',
-                'La sede ha sido inactivada exitosamente.',
-                'success'
-              )
+            console.log(self.filtro);
+            self.gridOptions1.data = response.data;
           });
-      }, function (dismiss) {
-        // dismiss can be 'cancel', 'overlay',
-        // 'close', and 'timer'
-        if (dismiss === 'cancel') {
-          swal(
-            'Cancelado',
-            'La sede mantiene su estado "Activo"',
-            'error'
-          )
-        }
-      })
+      }
 
-  };
+      //Función para actualizar la información de una aplicación
+      self.actualizar = function(row) {
+        //El index indica la posición en la grilla
+        var index = self.gridOptions1.data.indexOf(row.entity);
+        //Permite que la fila del index, sea editable
+        self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
+
+        console.log("Entro a editar");
+
+        var jsonActualizado = row.entity;
+        oikosRequest.put('espacio_fisico', self.gridOptions1.Id, jsonActualizado)
+          .then(function(response) {
+            self.ServerResponse = response.data;
+          })
+
+      };
+
+      //Función para borrar un registro de la tabla
+      self.inactivarEspacioFisico = function(row) {
+        var index = self.gridOptions1.data.indexOf(row.entity);
+        //Alerta de cambiar el estado
+        swal({
+            title: 'Esta seguro de inactivar la sede?',
+            text: "No puedes revertir esta opción!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, inactivar sede!',
+            cancelButtonText: 'No, cancelar!',
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            buttonsStyling: false
+          }).then(function () {
+
+            //Variable que cambia el estado
+            row.entity.Estado = 'Inactivo';
+            //Inactiva la sede de la BD
+            oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
+              .then(function(response) {
+                console.log(cambio_estado);
+                  swal(
+                    'Inactivada!',
+                    'La sede ha sido inactivada exitosamente.',
+                    'success'
+                  )
+              });
+          }, function (dismiss) {
+            // dismiss can be 'cancel', 'overlay',
+            // 'close', and 'timer'
+            if (dismiss === 'cancel') {
+              swal(
+                'Cancelado',
+                'La sede mantiene su estado "Activo"',
+                'error'
+              )
+            }
+          })
+
+      };
 
 
   /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
