@@ -10,6 +10,13 @@
       <div class="panel-body">
         <!--Formulario de registro-->
         <form name="formespacio" ng-submit="formespacio.$valid && crearEspacioFisico.crear_espacio_fisico()">
+          <!--ComboBox para seleccionar el tipo de espacio físico que se va a registrar-->
+          <fieldset class="form-group">
+              <label for="tTipoEspacio">Tipo Espacio:</label>
+              <select class="form-control"  ng-model="crearEspacioFisico.nuevo_espacio.TipoEspacio" ng-options="option.Nombre for option in crearEspacioFisico.tipo_espacio">
+                      <option value="">--Elija el tipo de espacio físico a registrar--</option>
+              </select>
+          </fieldset>
           <!--Campo de registro de nombre-->
           <fieldset class="form-group">
             <label for="nombreEspacio">Nombre:</label>
@@ -42,14 +49,18 @@
     <div class="panel panel-default">
       <!--Cabecera del panel de selección-->
       <div class="panel-heading">
-        <h3 class="panel-title"></h3>
+        <h3 class="panel-title">*Seleccione espacio físico padre si es necesario</h3>
       </div>
       <div class="panel-body">
-          <p>e.</p>
-          <div class="panel-body">
+
+            <!--ComboBox para seleccionar el tipo de espacio físico que se va a consultar-->
+                <label for="filtroTipoEspacio">Tipo Espacio:</label>
+                <select class="form-control"  ng-model="crearEspacioFisico.filtro" ng-options="option.Nombre for option in crearEspacioFisico.tipo_espacio" ng-click="crearEspacioFisico.cargar_tipo()">
+                        <option value="">--Elija el tipo de espacio físico a consultar--</option>
+                </select><br>
             <!--Tabla de selección de edificios-->
-            <!--<div style="height: {{gridHeight}}px;" ui-grid="crearSede.gridOptions_edificios" ui-grid-selection ui-grid-auto-resize></div>-->
-          </div>
+            <div style="height: {{gridHeight}}px;" ui-grid="crearEspacioFisico.gridOptions_espacios_fisicos" ui-grid-selection ui-grid-auto-resize></div>
+
       </div>
   </div>
   </div>
