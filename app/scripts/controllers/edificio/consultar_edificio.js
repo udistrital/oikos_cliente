@@ -44,9 +44,9 @@ angular.module('oikosClienteApp')
         {
           field: 'Acciones',
           width: "15%",
-          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarSede.inactivarSede(row)">' +
+          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.inactivarEdificio(row)">' +
           '<i class="fa fa-times"></i></button>&nbsp;' +
-          '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarSede.actualizar(row)">' +
+          '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.actualizar(row)">' +
           '<i class="glyphicon glyphicon-pencil"></i></button>'
 
           /*Para incluir funcionalidad de nuevos botnos y hacer llamado de modal
@@ -90,7 +90,7 @@ angular.module('oikosClienteApp')
     };
 
     //Función para borrar un registro de la tabla
-    self.inactivarSede = function(row) {
+    self.inactivarEdificio = function(row) {
       var index = self.gridOptions1.data.indexOf(row.entity);
       //Alerta de cambiar el estado
       swal({
@@ -114,7 +114,7 @@ angular.module('oikosClienteApp')
               //Alerta
               swal(
                 'Inactivado!',
-                'El edificio ha sido inactivada exitosamente.',
+                'El edificio ha sido inactivado exitosamente.',
                 'success'
               )
             });
@@ -123,7 +123,7 @@ angular.module('oikosClienteApp')
         if (dismiss === 'cancel') {
           swal(
             'Cancelado',
-            'La sede mantiene su estado "Activo"',
+            'La acción se ha cancelado',
             'error'
           )
         }
