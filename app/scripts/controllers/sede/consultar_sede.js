@@ -112,7 +112,7 @@ angular.module('oikosClienteApp')
           //Inactiva la sede de la BD
           oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
             .then(function(response) {
-              console.log(cambio_estado);
+              //SweetAlert
                 swal(
                   'Inactivada!',
                   'La sede ha sido inactivada exitosamente.',
