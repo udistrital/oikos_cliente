@@ -26,7 +26,7 @@
             <input type="text" class="form-control" id="correoDependencia" placeholder="INGRESA EL CORREO ELECTRONICO DE LA DEPENDENCIA" ng-model="crearDependencia.nueva_dependencia.Correo" maxlength="70" required>
           </fieldset>
          <!--Boton para enviar datos al formulario-->
-          <button type="submit" class="btn btn-outline btn-primary">Confirmar </button>
+          <button type="submit" class="btn btn-outline btn-primary">Confirmar</button>
         </form>
 
       </div>
@@ -41,10 +41,9 @@
         <h3 class="panel-title">Elija la dependencia padre</h3>
       </div>
       <div class="panel-body">
-          <p>Por favor seleccione los edificios que le pertenecen a la sede.</p>
+          <p>Por favor seleccione el padre de la dependencia.</p>
           <div class="panel-body">
-            <!--Tabla de selección de edificios-->
-            <div style="height: {{gridHeight}}px;" ui-grid="crearSede.gridOptions_edificios" ui-grid-selection ui-grid-auto-resize></div>
+
           </div>
       </div>
   </div>
