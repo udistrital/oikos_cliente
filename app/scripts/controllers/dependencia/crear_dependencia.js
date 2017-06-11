@@ -8,30 +8,28 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearDependenciaCtrl', function (oikosRequest, $window) {
+  .controller('CrearDependenciaCtrl', function (oikosRequest, $window, $scope) {
     //Se utiliza la variable self estandarizada
     var self=this;
     //Se crea JSON para la nueva_dependencia
     self.nueva_dependencia = {};
 
-    /*//Creación tabla que carga edificios
-     self.gridOptions_dependencias = {
-        enableRowSelection: true,
-        enableRowHeaderSelection: true,
-        enableSelectAll: true,
-        columnDefs: [
-          { field: 'Nombre'},
-          { field: 'Correo'}
-     ],
-   };
-
-    //Función obtener los edificios
-    oikosRequest.get('dependencia', $.param({
-       limit: 0
-    }))
-    .then(function(response) {
-       self.gridOptions_edificios.data = response.data;
-    });*/
+    //Se define la variable de TreeControl
+    $scope.treeOptions = {
+   	  	         multiSelection: false,
+   	  	         nodeChildren: "Opciones",
+   	  	         dirSelectable: true,
+   	  	         injectClasses: {
+   	  	             ul: "a1",
+   	  	             li: "a2",
+   	  	             liSelected: "a7",
+   	  	             iExpanded: "a3",
+   	  	             iCollapsed: "a4",
+   	  	             iLeaf: "a5",
+   	  	             label: "a6",
+   	  	             labelSelected: "a8"
+   	             }
+    };
 
     //Función para crear la dependencia
     self.crear_dependencia=function(form){
@@ -67,5 +65,24 @@ angular.module('oikosClienteApp')
             }
           })
       });
-  };
-  });
+    };
+
+
+    /*Función para incluir los menus de acuerdo a la app seleccionada*/
+  	self.visualizar_dependencias = function(){
+  		    //Variable que contiene los menús
+  			  $scope.dataForTheTree = [];
+          console.log("Entro a visualizar_dependencias");
+          //Pinta las dependencias
+          oikosRequest.get('dependencia_padre/ArbolDependencias', $.param({
+              limit: 0
+            }))
+            .then(function(response) {
+               $scope.dataForTheTree = response.data;
+            });
+    };
+
+
+
+
+});

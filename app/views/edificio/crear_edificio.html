@@ -23,7 +23,7 @@
           <!--ComboBox de registro de estado-->
           <fieldset class="form-group">
             <label for="unidadplan">Estado:</label>
-            <select  class="form-control" ng-model="crearEdificio.nuevo_edificio.estado" required>
+            <select  class="form-control" ng-model="crearEdificio.nuevo_edificio.Estado" required>
                       <option value="">--Elija el estado que tendrá la edificio--</option>
                       <option value="Activo">Activo</OPTION>
                       <option value="Inactivo">Inactivo</OPTION>
@@ -47,6 +47,11 @@
       <div class="panel-body">
           <p>Por favor seleccione los espacios físicos que le pertenecen al edificio.</p>
           <div class="panel-body">
+            <!--ComboBox para seleccionar el tipo de espacio físico que se va a consultar-->
+                <label for="filtroTipoEspacio">Tipo Espacio:</label>
+                <select class="form-control"  ng-model="crearEdificio.filtro" ng-options="option.Nombre for option in crearEdificio.tipo_espacio" ng-click="crearEdificio.cargar_tipo()">
+                        <option value="">--Elija el tipo de espacio físico a consultar--</option>
+                </select><br>
             <!--Tabla de selección de espacios físicos-->
             <div style="height: {{gridHeight}}px;" ui-grid="crearEdificio.gridOptions_espacios_fisicos" ui-grid-selection ui-grid-auto-resize></div>
           </div>

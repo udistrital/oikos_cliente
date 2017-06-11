@@ -43,6 +43,20 @@
       <div class="panel-body">
           <p>Por favor seleccione el padre de la dependencia.</p>
           <div class="panel-body">
+            <button type="submit" ng-click="crearDependencia.visualizar_dependencias()">Ver árbol de dependencias</button>
+              <!--Pinta las dependencias según el organigrama de la Universidad Distrital-->
+              <!--Seleccionar menús relacionados con la aplicación-->
+                       <treecontrol class="tree-classic"
+                           tree-model="dataForTheTree"
+                           options="treeOptions"
+                           on-selection="showSelected(node, selected, $parentNode)"
+                           selected-node="node1"
+                           selected-nodes="menu_x_perfil"
+                           expanded-nodes="expandedNodes"
+                           >
+
+                           Dependencia: {{node.Nombre}}
+                      </treecontrol>
 
           </div>
       </div>

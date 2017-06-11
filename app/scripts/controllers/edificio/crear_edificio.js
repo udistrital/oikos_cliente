@@ -13,13 +13,19 @@ angular.module('oikosClienteApp')
     //Se utiliza la variable self estandarizada
     var self = this;
 
+    //JSON que contiene los tipos de espacio_fisico
+    self.tipo_espacio = {};
+
+    //Variable que sirve de filtro
+    self.filtro = {};
+
     //Se crea JSON para el nuevo_edificio
     self.nuevo_edificio = {};
     self.nuevo_edificio.TipoEspacio = {
       Id: 2
     };
 
-    //Creación tabla que carga edificios
+    //Creación tabla que carga espacios físicos
     self.gridOptions_espacios_fisicos = {
       enableRowSelection: true,
       enableRowHeaderSelection: true,
@@ -34,16 +40,29 @@ angular.module('oikosClienteApp')
       ],
     };
 
-    //Función obtener los edificios
-    oikosRequest.get('espacio_fisico', $.param({
-        query: "TipoEspacio:3",
-        limit: 0
+    //Función que obtiene todas los tipos de espacio
+    oikosRequest.get('tipo_espacio_fisico', $.param({
+        limit: 0,
+        offset: 2
       }))
       .then(function(response) {
-        self.gridOptions_espacios_fisicos.data = response.data;
+        self.tipo_espacio = response.data;
       });
 
-    console.log(self.nuevo_edificio);
+      //Función que carga de acuerdo al ID del tipo_espacio
+      self.cargar_tipo = function(){
+        //Función que obtiene todas las espacio_fisicos
+        oikosRequest.get('espacio_fisico', $.param({
+            query: "TipoEspacio:" + self.filtro.Id + "",
+            limit: 0
+          }))
+          .then(function(response) {
+            console.log(self.filtro);
+            self.gridOptions_espacios_fisicos.data = response.data;
+          });
+      }
+
+
     //Función para crear el edificio
     self.crear_edificio = function(form) {
       console.log(self.nuevo_edificio);
