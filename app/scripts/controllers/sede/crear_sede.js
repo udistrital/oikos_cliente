@@ -36,7 +36,7 @@ angular.module('oikosClienteApp')
         limit: 0
       })).then(function(response) {
         self.gridOptions_edificios.data = response.data;
-      });  
+      });
 
     //Función para crear la sede
     self.crear_sede = function(form) {
@@ -47,6 +47,8 @@ angular.module('oikosClienteApp')
 
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
+
+        console.log(response);
         //Notificación de success
         swal({
           title: "Registro exitoso",
