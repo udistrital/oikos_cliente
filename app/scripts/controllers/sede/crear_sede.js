@@ -32,12 +32,11 @@ angular.module('oikosClienteApp')
     };
 
     //Función obtener los edificios
-    oikosRequest.get('espacio_fisico', $.param({
-        query: "TipoEspacio:2"
-      }))
-      .then(function(response) {
+    oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
+        limit: 0
+      })).then(function(response) {
         self.gridOptions_edificios.data = response.data;
-      });
+      });  
 
     //Función para crear la sede
     self.crear_sede = function(form) {

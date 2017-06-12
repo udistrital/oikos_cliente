@@ -52,13 +52,23 @@ angular.module('oikosClienteApp')
       //Función que carga de acuerdo al ID del tipo_espacio
       self.cargar_tipo = function(){
         //Función que obtiene todas las espacio_fisicos
-        oikosRequest.get('espacio_fisico', $.param({
-            query: "TipoEspacio:" + self.filtro.Id + "",
+        oikosRequest.get('espacio_fisico/EspaciosHuerfanos/'+ self.filtro.Id + '', $.param({
             limit: 0
           }))
           .then(function(response) {
-            console.log(self.filtro);
-            self.gridOptions_espacios_fisicos.data = response.data;
+            console.log(response);
+            //Condicional si la petición arroja NULL
+            if (response.data === null) {
+              console.log("Entro 1")
+              self.gridOptions_espacios_fisicos.data = [];
+              //swal('No se encontraron espacios físicos huerfanos relacionados')
+
+            }else{
+              //Si la petición arroja información la muestra
+              self.gridOptions_espacios_fisicos.data = response.data;
+              console.log("Entro 2")
+            }
+
           });
       }
 
