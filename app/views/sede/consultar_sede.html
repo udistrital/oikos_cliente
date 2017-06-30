@@ -12,3 +12,61 @@
     </div>
   </div>
 <div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="exampleModalLongTitle">Gestionar edificios de la sede</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label>Sede:<p>{{sede.Nombre}}</p></label><br>
+
+          <label>Estado:<p>{{consultarSede.sede.Estado}}</p></label><br>
+          <label>Edificios asociados: </label>
+
+          <treecontrol class="tree-classic"
+           tree-model="opciones"
+           options="treeOptions"
+           on-selection="showSelected(node)"
+           selected-node="node1"
+           selected-nodes="menu_x_perfil"
+           expanded-nodes="expandedNodes"
+           >
+
+           Edificio: {{node.Nombre}}
+          </treecontrol>
+
+        </div>
+        ---------------------------------------------------------------------------
+        <!--Div para cargar los menús de la app que no estan asociadas al perfil-->
+        <div class="modal-body">
+          <label>Edificios sin sedes asociados: </label>
+           <treecontrol class="tree-classic"
+             tree-model="dataForTheTree"
+             options="treeOptions"
+             on-selection="showSelected(node)"
+             selected-node="node1"
+             selected-nodes="nuevo_menu_x_perfil"
+             >
+
+             Edificio: {{node.Nombre}}
+            </treecontrol>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" ng-click="guardar_nuevos()">Guardar nuevos</button>
+          <!--habilitar Boton cuando se tenga la función de borrado-->
+          <!--<button type="button" class="btn btn-primary" ng-click="borrar()">Borrar</button>-->
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <pre>{{sede.Nombre}}</pre>
