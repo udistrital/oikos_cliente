@@ -31,6 +31,14 @@ angular.module('oikosClienteApp')
       ],
     };
 
+    /*self.gridOptions_edificios.onRegisterApi = function(gridApi) {
+         //set gridApi on scope
+         self.gridApi = gridApi;
+         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+           $scope.rubrosobj = self.gridApi.selection.getSelectedRows();
+           console.log($scope.rubrosobj);
+         });*/
+
     //Función obtener los edificios
     oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
         limit: 0
