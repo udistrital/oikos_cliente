@@ -44,10 +44,11 @@ angular.module('oikosClienteApp')
         {
           field: 'Acciones',
           width: "15%",
-          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.inactivarEdificio(row)">' +
-          '<i class="fa fa-times"></i></button>&nbsp;' +
-          '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.actualizar(row)">' +
-          '<i class="glyphicon glyphicon-pencil"></i></button>'
+          cellTemplate: '<button title="Activar/Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.cambiarEstado(row)">' +
+            '<i class="fa fa-exchange"></i></button>&nbsp;' +
+            '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.actualizar(row)">' +
+            '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Gestionar espacios físicos" type="button" class="btn btn-primary btn-circle"' +
+            'ng-click="grid.appScope.visualizar(row);grid.appScope.showAdvanced($event, row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
 
           /*Para incluir funcionalidad de nuevos botnos y hacer llamado de modal
           '<center>' +
@@ -90,45 +91,77 @@ angular.module('oikosClienteApp')
     };
 
     //Función para borrar un registro de la tabla
-    self.inactivarEdificio = function(row) {
+    self.cambiarEstado = function(row) {
+      //Indica la posición de la fila
       var index = self.gridOptions1.data.indexOf(row.entity);
-      //Alerta de cambiar el estado
-      swal({
-        title: 'Esta seguro de inactivar el edificio?',
-        text: "No puedes revertir esta opción!",
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, inactivar edificio!',
-        cancelButtonText: 'No, cancelar!',
-        confirmButtonClass: 'btn btn-success',
-        cancelButtonClass: 'btn btn-danger',
-        buttonsStyling: false
-      }).then(function() {
+      //Variable que tiene el nombre del edificio
+      var nombre = row.entity.Nombre;
+      //Variable que tiene el estado  del edificio
+      var estado = row.entity.Estado;
+
+      //Condicional que permite cambiar el estado
+      if (estado == 'Inactivo') {
+
+        //Alerta de cambiar el estado
+        swal({
+          title: 'Esta seguro que quiere cambiar el estado del edificio ' + nombre + '?',
+          text: "Esta acción puede generar cambios",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, activar edificio!',
+          cancelButtonText: 'No, cancelar!',
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+        }).then(function() {
+
+          //Variable que cambia el estado
+          row.entity.Estado = 'Activo';
+          //Inactiva la sede de la BD
+          oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
+            .then(function(response) {
+              //SweetAlert
+              swal('Activado!', 'El edificio ha sido activado exitosamente.', 'success')
+            });
+        }, function(dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+            swal('Cancelado', 'Se cancelo la acción', 'error')
+          }
+        })
+      } else if (estado == 'Activo') {
+        //Alerta de cambiar el estado
+        swal({
+          title: 'Esta seguro que quiere cambiar el estado del edificio ' + nombre + '?',
+          text: "Se borraran las relaciones de los espacios físicos asociados a este edificio!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, inactivar edificio!',
+          cancelButtonText: 'No, cancelar!',
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+        }).then(function() {
+
           //Variable que cambia el estado
           row.entity.Estado = 'Inactivo';
           //Inactiva la sede de la BD
           oikosRequest.put('espacio_fisico', row.entity.Id, row.entity)
             .then(function(response) {
-              //Alerta
-              swal(
-                'Inactivado!',
-                'El edificio ha sido inactivado exitosamente.',
-                'success'
-              )
+              //SweetAlert
+              swal('Inactivado!', 'El edificio ha sido inactivado exitosamente.', 'success')
             });
-      }, function(dismiss) {
-        //Evento al presionar el boton cancelar
-        if (dismiss === 'cancel') {
-          swal(
-            'Cancelado',
-            'La acción se ha cancelado',
-            'error'
-          )
-        }
-      })
-
+        }, function(dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+            swal('Cancelado', 'Se cancelo la acción', 'error')
+          }
+        })
+      }
     };
 
 
