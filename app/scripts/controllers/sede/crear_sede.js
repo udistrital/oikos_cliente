@@ -55,30 +55,46 @@ angular.module('oikosClienteApp')
 
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
-
+        console.log(response.status);
         console.log(response);
-        //Notificación de success
-        swal({
-          title: "Registro exitoso",
-          html: "<label>Se insertó correctamente la sede con los siguientes datos</label><br><br><label><b>Nombre:</b></label> " +
-            self.nueva_sede.Nombre + "<br><label><b>Código:</b></label> " + self.nueva_sede.Codigo,
-          type: "success",
-          showCancelButton: true,
-          confirmButtonColor: "#449D44",
-          cancelButtonColor: "#2c6bc9",
-          confirmButtonText: "Registrar nueva sede",
-          cancelButtonText: "Consultar sede",
-        }).then(function() {
-            //Si da click lo redirije a crear nueva dependencia
-            $window.location.reload();
-          },
-          function(dismiss) {
-            //Si da click lo redirije a consultar sede
-            if (dismiss === 'cancel') {
-              /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
-              $window.location.href = '#/consultar_sede';
-            }
-          })
+        //
+        if (response.status == 201) {
+
+          //Notificación que se lanza si se puede ejecutar la transacción
+          //Notificación de success
+          swal({
+            title: "Registro exitoso",
+            html: "<label>Se insertó correctamente la sede con los siguientes datos</label><br><br><label><b>Nombre:</b></label> " +
+              self.nueva_sede.Nombre + "<br><label><b>Código:</b></label> " + self.nueva_sede.Codigo,
+            type: "success",
+            showCancelButton: true,
+            confirmButtonColor: "#449D44",
+            cancelButtonColor: "#2c6bc9",
+            confirmButtonText: "Registrar nueva sede",
+            cancelButtonText: "Consultar sede",
+          }).then(function() {
+              //Si da click lo redirije a crear nueva dependencia
+              $window.location.reload();
+            },
+            function(dismiss) {
+              //Si da click lo redirije a consultar sede
+              if (dismiss === 'cancel') {
+                /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
+                $window.location.href = '#/consultar_sede';
+              }
+            })
+
+        }else {
+
+          //Se visualiza cuando no se pudo insertar en la BD
+          swal(
+            'Rechazada!',
+            'Su transacción ha sido rechazada porque se produjo un error a nivel de base de datos',
+            'error'
+          )
+
+        }
+
       });
     };
   });
