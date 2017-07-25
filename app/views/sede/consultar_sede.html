@@ -25,13 +25,14 @@
           </button>
         </div>
         <div class="modal-body">
-          <label>Sede:<p>{{sede.Nombre}}</p></label><br>
+
+          <label>Sede:<p>{{consultarSede.sede.Nombre}}</p></label><br>
 
           <label>Estado:<p>{{consultarSede.sede.Estado}}</p></label><br>
           <label>Edificios asociados: </label>
 
           <treecontrol class="tree-classic"
-           tree-model="opciones"
+           tree-model="consultarSede.dataForTheTree"
            options="treeOptions"
            on-selection="showSelected(node)"
            selected-node="node1"
@@ -39,7 +40,8 @@
            expanded-nodes="expandedNodes"
            >
 
-           Edificio: {{node.Nombre}}
+           Edificio: {{node.Hijo.Nombre}}
+
           </treecontrol>
 
         </div>

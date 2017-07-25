@@ -67,7 +67,7 @@ angular.module('oikosClienteApp')
             '<i class="fa fa-exchange"></i></button>&nbsp;' +
             '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarSede.actualizar(row)">' +
             '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Gestionar edificios" type="button" class="btn btn-primary btn-circle"' +
-            'ng-click="grid.appScope.visualizar(row);grid.appScope.showAdvanced($event, row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
+            'ng-click="grid.appScope.consultarSede.gestionar_edificios(row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
         }
 
       ]
@@ -205,21 +205,23 @@ angular.module('oikosClienteApp')
       //Variable que contiene la sede que va a gestionar los edificios
       self.sede = row.entity;
 
-      console.log(self.sede.Id);
+      console.log(row.entity.Id);
 
       //Obtiene los menús asociados a ese perfil
-                 oikosRequest.get('espacio_fisico_padre/', $.param({
-                     query: "Padre:"+ self.sede.Id+"",
-                     limit: 0
-                   }))
-                    .then(function(response) {
-                        self.opciones = response.data;
-                        if (self.opciones === null) {
-                            self.opciones = {};
-                        };
-                        console.log(self.opciones);
-                        //$scope.showComplex();
-})
+      oikosRequest.get('espacio_fisico_padre/', $.param({
+          query: "Padre:" + self.sede.Id + "",
+          //query: "Padre:1096",
+          limit: 0
+        }))
+        .then(function(response) {
+          self.dataForTheTree = response.data;
+
+          if (self.opciones === null) {
+            self.opciones = {};
+          };
+          console.log(self.dataForTheTree);
+          //$scope.showComplex();
+        })
 
 
     };
