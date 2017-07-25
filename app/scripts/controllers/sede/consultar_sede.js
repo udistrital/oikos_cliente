@@ -205,26 +205,30 @@ angular.module('oikosClienteApp')
       //Variable que contiene la sede que va a gestionar los edificios
       self.sede = row.entity;
 
-      console.log(row.entity.Id);
-
       //Obtiene los menús asociados a ese perfil
       oikosRequest.get('espacio_fisico_padre/', $.param({
           query: "Padre:" + self.sede.Id + "",
-          //query: "Padre:1096",
           limit: 0
         }))
         .then(function(response) {
+          //Se asigna a esta variable la data cargada
           self.dataForTheTree = response.data;
 
-          if (self.opciones === null) {
-            self.opciones = {};
+          //Condicional que impide que al cargar una sede sin hijos quede con este valor
+          if (self.dataForTheTree === null) {
+            self.dataForTheTree = {};
           };
-          console.log(self.dataForTheTree);
-          //$scope.showComplex();
+
         })
 
-
-    };
+        //Función obtener los edificios
+        oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
+            limit: 0
+          })).then(function(response) {
+            //Variable que carga el árbol de los EspaciosHuerfanos
+            self.huerfanos = response.data;
+          });
+      };
 
     /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
     self.reset = function(form) {
