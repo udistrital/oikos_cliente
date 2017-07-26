@@ -8,9 +8,12 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearSedeCtrl', function(oikosRequest, $window) {
+  .controller('CrearSedeCtrl', function(oikosRequest, $window, $scope) {
     //Se utiliza la variable self estandarizada
     var self = this;
+
+    //Variable que contiene los edificios seleccionados
+    self.edificiosSeleccionados = {};
     //Se crea JSON para la nueva_sede
     self.nueva_sede = {};
     self.nueva_sede.TipoEspacio = {
@@ -31,13 +34,15 @@ angular.module('oikosClienteApp')
       ],
     };
 
-    /*self.gridOptions_edificios.onRegisterApi = function(gridApi) {
+    //Función que captura los valores seleccionados por el check
+    self.gridOptions_edificios.onRegisterApi = function(gridApi) {
          //set gridApi on scope
-         self.gridApi = gridApi;
+         $scope.gridApi = gridApi;
          gridApi.selection.on.rowSelectionChanged($scope, function(row) {
-           $scope.rubrosobj = self.gridApi.selection.getSelectedRows();
-           console.log($scope.rubrosobj);
-         });*/
+           self.edificiosSeleccionados = $scope.gridApi.selection.getSelectedRows();
+           console.log(self.edificiosSeleccionados);
+         });
+    };
 
     //Función obtener los edificios
     oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
@@ -56,9 +61,26 @@ angular.module('oikosClienteApp')
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
         console.log(response.status);
-        console.log(response);
-        //
+        console.log(response.data.Id);
+
+        //Condicional de validación
         if (response.status == 201) {
+          //console.log(self.nueva_sede.Id);
+         //For para realizar el post a la tabla espacio_fisico_padre
+          for (var i = 0; i < self.edificiosSeleccionados.length; i++) {
+            //Se realiza la petición POST, para guardar los edificios asociados a la sede
+            oikosRequest.post('espacio_fisico_padre', {
+                "Padre": {response.data.Id,
+                          self.nueva_sede.Estado,
+                          self.nueva_sede.TipoEspacio,
+                          self.nueva_sede.Nombre,
+                          self.nueva_sede.Codigo},
+                "Hijo": self.edificiosSeleccionados[i]
+              })
+              .then(function(response) {
+                console.log("Se ha realizado la transacción de forma exitosa");
+              });
+          }
 
           //Notificación que se lanza si se puede ejecutar la transacción
           //Notificación de success
@@ -83,18 +105,14 @@ angular.module('oikosClienteApp')
                 $window.location.href = '#/consultar_sede';
               }
             })
-
         }else {
-
           //Se visualiza cuando no se pudo insertar en la BD
           swal(
             'Rechazada!',
             'Su transacción ha sido rechazada porque se produjo un error a nivel de base de datos',
             'error'
           )
-
         }
-
       });
     };
   });
