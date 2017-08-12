@@ -60,25 +60,22 @@ angular.module('oikosClienteApp')
 
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
-        console.log(response.status);
-        console.log(response.data.Id);
 
+        self.nueva_sede.Id = response.data.Id;
         //Condicional de validación
+        console.log(self.nueva_sede);
         if (response.status == 201) {
           //console.log(self.nueva_sede.Id);
          //For para realizar el post a la tabla espacio_fisico_padre
           for (var i = 0; i < self.edificiosSeleccionados.length; i++) {
             //Se realiza la petición POST, para guardar los edificios asociados a la sede
             oikosRequest.post('espacio_fisico_padre', {
-                "Padre": {response.data.Id,
-                          self.nueva_sede.Estado,
-                          self.nueva_sede.TipoEspacio,
-                          self.nueva_sede.Nombre,
-                          self.nueva_sede.Codigo},
+                "Padre": self.nueva_sede,
                 "Hijo": self.edificiosSeleccionados[i]
-              })
+              }
+            )
               .then(function(response) {
-                console.log("Se ha realizado la transacción de forma exitosa");
+                console.log("Se ha realizado la transacción en la tabla espacio físico padre de forma exitosa");
               });
           }
 
