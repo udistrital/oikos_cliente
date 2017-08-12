@@ -1,4 +1,4 @@
-<!--Vista para consultar las sedes-->
+ <!--Vista para consultar las sedes-->
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -14,7 +14,7 @@
 <div>
 
   <!-- Modal -->
-  <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal fade" id="gestionarEdificios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -54,7 +54,7 @@
              options="treeOptions"
              on-selection="showSelected(node)"
              selected-node="node1"
-             selected-nodes="nuevo_menu_x_perfil"
+             selected-nodes="nuevos_edificios"
              >
 
              Edificio: {{node.Nombre}}
@@ -63,12 +63,34 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" ng-click="guardar_nuevos()">Guardar nuevos</button>
-          <!--habilitar Boton cuando se tenga la función de borrado-->
-          <!--<button type="button" class="btn btn-primary" ng-click="borrar()">Borrar</button>-->
+          <button type="button" class="btn btn-primary" ng-click="consultarSede.guardar_nuevos()">Guardar nuevos</button>
         </div>
       </div>
     </div>
   </div>
 
+
+  <!-- Modal -->
+  <div class="modal fade" id="editarSede" tabindex="-1" role="dialog" aria-labelledby="editarSedeTitle" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title" id="editarSedeTitle">Editar información de la sede</h2>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+
+          <label>Sede:</label><input>{{consultarSede.sede.Nombre}}</input><br>
+          <label>Código:</label><input>{{consultarSede.sede.Codigo}}</input><br>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" ng-click="consultarSede.guardar_nuevos()">Guardar nuevos</button>
+        </div>
+      </div>
+    </div>
+  </div>
     <pre>{{sede.Nombre}}</pre>
