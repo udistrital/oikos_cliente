@@ -67,7 +67,7 @@ angular.module('oikosClienteApp')
             '<i class="fa fa-exchange"></i></button>&nbsp;' +
             '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarSede.actualizar(row)">' +
             '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Gestionar edificios" type="button" class="btn btn-primary btn-circle"' +
-            'ng-click="grid.appScope.consultarSede.gestionar_edificios(row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
+            'ng-click="grid.appScope.consultarSede.gestionar_edificios(row)" data-toggle="modal" data-target="#gestionarEdificios""><i class="glyphicon glyphicon-eye-open"></i></button>'
         }
 
       ]
@@ -132,6 +132,8 @@ angular.module('oikosClienteApp')
       var nombre = row.entity.Nombre;
       //Variable que tiene el estado  de la Sede
       var estado = row.entity.Estado;
+      //Variable que tiene el Id de la sede
+      var id = row.entity.Id;
 
       //Condicional que permite cambiar el estado
       if (estado == 'Inactivo') {
@@ -180,6 +182,29 @@ angular.module('oikosClienteApp')
           cancelButtonClass: 'btn btn-danger',
         }).then(function() {
 
+          //Función obtener los edificios relacionados a la sede
+          oikosRequest.get('espacio_fisico_padre', $.param({
+              query: 'Padre:' + id,
+              limit: 0
+            })).then(function(response) {
+              //Variable que tiene el Id de la relaciÓn a borrar
+              for(var i = 0; i < response.data.length; i++){
+                //Variable que guarda el Id de la relación encontrada
+                self.relacionId = response.data[i].Id;
+
+                //Petición para borrar las relaciones
+                oikosRequest.delete('espacio_fisico_padre', self.relacionId)
+                .then(function(response) {
+                  if(response.data === 'OK'){
+                    console.log("La relación con id "+ self.relacionId + " se ha borrado exitosamente");
+                  }else{
+                    console.log("No se púdo borrar");
+                  }
+                })
+              }
+            });
+
+
           //Variable que cambia el estado
           row.entity.Estado = 'Inactivo';
           //Inactiva la sede de la BD
@@ -205,7 +230,7 @@ angular.module('oikosClienteApp')
       //Variable que contiene la sede que va a gestionar los edificios
       self.sede = row.entity;
 
-      //Obtiene los menús asociados a ese perfil
+      //Obtiene los edificios asociados a la sede
       oikosRequest.get('espacio_fisico_padre/', $.param({
           query: "Padre:" + self.sede.Id + "",
           limit: 0
@@ -229,6 +254,61 @@ angular.module('oikosClienteApp')
             self.huerfanos = response.data;
           });
       };
+
+
+      //Función para vincular nuevos edificios
+      self.guardar_nuevos = function() {
+
+      //For para realizar el post a la tabla perfil_x_menu_opcion
+      for (var i = 0; i < $scope.nuevos_edificios.length; i++) {
+        //Se realiza la petición POST, para guardar los menús asociados al perfil
+        console.log($scope.nuevos_edificios);
+        oikosRequest.post('espacio_fisico_padre', {
+            "Padre": self.sede,
+            "Hijo": $scope.nuevos_edificios[i]
+          })
+          .then(function(response) {
+            //Condicional
+            if (response.data === 'pq: duplicate key value violates unique constraint "PK_ESPACIO_FISICO_PADRE"') {
+              console.log($scope.nuevos_edificios[i]);
+              //sweetalert2 que indica que el menú ya se encuentra agregado
+              swal('El edificio <label><b>' + $scope.nuevos_edificios.Nombre + '</b></label> ya se encuentra asociado a la sede','Valide la información','error')
+              //alert("El menú " + $scope.nombre_menu + "</b> ya se encuentra asociado al perfil");
+            } else {
+              //sweetalert2 que indica el nombre del menú que acabo de vincular
+              swal('Correcto','Los edificios se han vinculado a la sede satisfactoriamente','success')
+            }
+          });
+        }
+              //Cargar los nuevos edificios asociados
+              //Obtiene los menús asociados a ese perfil
+              //Obtiene los edificios asociados a la sede
+              oikosRequest.get('espacio_fisico_padre/', $.param({
+                  query: "Padre:" + self.sede.Id + "",
+                  limit: 0
+                }))
+                .then(function(response) {
+                  //Se asigna a esta variable la data cargada
+                  self.dataForTheTree = response.data;
+
+                  //Condicional que impide que al cargar una sede sin hijos quede con este valor
+                  if (self.dataForTheTree === null) {
+                    self.dataForTheTree = {};
+                  };
+
+                })
+
+                //Función obtener los edificios
+                oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
+                    limit: 0
+                  })).then(function(response) {
+                    //Variable que carga el árbol de los EspaciosHuerfanos
+                    self.huerfanos = response.data;
+                  });
+            //else}
+        //  });
+      //for}
+    };
 
     /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
     self.reset = function(form) {
