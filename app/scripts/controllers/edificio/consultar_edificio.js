@@ -11,10 +11,10 @@ angular.module('oikosClienteApp')
   .controller('ConsultarEdificioCtrl', function(oikosRequest, uiGridConstants) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
-
+    
     //Se utiliza la variable self estandarizada
     var self = this;
-
+    self.edificio= "";
     //Creación tabla
     self.gridOptions1 = {
       enableSorting: true,
@@ -46,7 +46,7 @@ angular.module('oikosClienteApp')
           width: "15%",
           cellTemplate: '<button title="Activar/Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.cambiarEstado(row)">' +
             '<i class="fa fa-exchange"></i></button>&nbsp;' +
-            '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.actualizar(row)">' +
+            '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.abrir_modal_editar(row)" data-toggle="modal" data-target="#editarEdificio">' +
             '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Gestionar espacios físicos" type="button" class="btn btn-primary btn-circle"' +
             'ng-click="grid.appScope.visualizar(row);grid.appScope.showAdvanced($event, row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
 
@@ -64,6 +64,15 @@ angular.module('oikosClienteApp')
       ]
     };
 
+        //Funcion para abrir el modal
+        self.abrir_modal_editar = function(row){          
+           //Variable que contiene la sede que va a gestionar los edificios
+           self.edificio = row.entity;
+            document.getElementById("Nombre").value=self.edificio.Nombre;
+            document.getElementById("Codigo").value=self.edificio.Codigo;
+            document.getElementById("Estado").value=self.edificio.Estado;
+        }
+
     //Función que obtiene todas las espacio_fisicoes
     oikosRequest.get('espacio_fisico', $.param({
         query: "TipoEspacio:2",
@@ -73,22 +82,66 @@ angular.module('oikosClienteApp')
         self.gridOptions1.data = response.data;
       });
 
-    //Función para actualizar la información de una aplicación
-    self.actualizar = function(row) {
-      //El index indica la posición en la grilla
-      var index = self.gridOptions1.data.indexOf(row.entity);
-      //Permite que la fila del index, sea editable
-      self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
+      self.actualizar = function() {
+        //El index indica la posición en la grilla        
+        //Contiene el nombre de la sede
+        var jsonActualizado ={
+          Nombre : document.getElementById("Nombre").value.toUpperCase(),
+          Codigo : document.getElementById("Codigo").value.toUpperCase(),
+          Estado : document.getElementById("Estado").value.toUpperCase(),
+          TipoEspacio:{Id : 2}
+        };
+  
+        //Alerta de cambiar el estado
+        swal({
+          title: 'Esta seguro que quiere editar el edificio ' + jsonActualizado.Nombre + '?',
+          text : "OK!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, editar edificio!',
+          cancelButtonText: 'No, cancelar!',
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+        }).then(function() {
+          //JSON que contiene la información nueva del registro
+  
+          //Petición que actualiza la información
+          oikosRequest.put('espacio_fisico', self.edificio.Id, jsonActualizado)
+            .then(function(response) {
+              //Respuesta de la petición
+              self.ServerResponse = response.data;
+              //SweetAlert
+              swal({
+                title:'Editado!',
+                text: 'El edificio ha sido editada exitosamente.', 
+                type:'success',
+                confirmButtonColor: '#3085d6',
+                confirmButtonClass: 'btn btn-success',
+            }).then(function(){
+              $('#editarEdificio').modal('toggle');
+                  //Función que obtiene todas las espacio_fisicoes
+            oikosRequest.get('espacio_fisico', $.param({
+              query: "TipoEspacio:2",
+              limit: 0
+            }))
+            .then(function(response) {
+              self.gridOptions1.data = response.data;
+            });
 
-      console.log("Entro a editar");
-
-      var jsonActualizado = row.entity;
-      oikosRequest.put('espacio_fisico', self.gridOptions1.Id, jsonActualizado)
-        .then(function(response) {
-          self.ServerResponse = response.data;
+            })
+  
+            })
+        }, function(dismiss) {
+          // dismiss can be 'cancel', 'overlay',
+          // 'close', and 'timer'
+          if (dismiss === 'cancel') {
+            swal('Cancelado', 'Se cancelo la acción', 'error')
+          }
         })
-
-    };
+  
+      };
 
     //Función para borrar un registro de la tabla
     self.cambiarEstado = function(row) {

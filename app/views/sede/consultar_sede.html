@@ -75,11 +75,8 @@
       </div>
     </div>
 
-
     <!-- Modal -->
     <div class="modal fade" id="editarSede" tabindex="-1" role="dialog" aria-labelledby="editarSedeTitle" aria-hidden="true">
-
-<<<<<<< HEAD
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -91,12 +88,12 @@
                 <div class="panel-heading"><h3>Editar información de la sede</h3></div>
                 <div class="panel-body">
                   <div class="col-lg-12">
-                      <label>Sede:</label><br><input size="80" value="{{consultarSede.sede.Nombre}}" id="Nombre"></input><br><br>
-                      <label>Código:</label><br><input size="80" maxlength="30" value="{{consultarSede.sede.Codigo}}" id="Codigo"></input><br><br>
-                      <label>Estado:</label><br><input size="80" value="{{consultarSede.sede.Estado}}" readonly id="Estado"></input><br><br>
+                      <label>Sede:</label><br><input size="80" id="Nombre" style="text-transform:uppercase"></input><br><br>
+                      <label>Código:</label><br><input size="80" maxlength="30" id="Codigo" style="text-transform:uppercase"></input><br><br>
+                      <label>Estado:</label><br><input size="80"  readonly id="Estado" style="text-transform:uppercase"></input><br><br>
                   </div>
                   <div class="col-lg-offset-5">
-                      <button type="button" class="btn btn-primary" ng-click="consultarSede.actualizar(consultarSede.sede)">Guardar</button>
+                      <button type="button" class="btn btn-primary" ng-click="consultarSede.actualizar()">Guardar</button>
                   </div>
                 </div>
             </div>

@@ -14,7 +14,7 @@ angular.module('oikosClienteApp')
 
     //Se utiliza la variable self estandarizada
     var self = this;
-    self.sede = {};
+    self.sede = "";
 
     //Se crea el esquema del tree
     $scope.treeOptions = {
@@ -76,10 +76,10 @@ angular.module('oikosClienteApp')
     //Funcion para abrir el modal
     self.abrir_modal_editar = function(row){
       
-       //El index indica la posición en la grilla
-       var index = self.gridOptions1.data.indexOf(row.entity);
-       //Variable que contiene la sede que va a gestionar los edificios
-       self.sede = row.entity;
+      self.sede = row.entity;
+      document.getElementById("Nombre").value=self.sede.Nombre;
+      document.getElementById("Codigo").value=self.sede.Codigo;
+      document.getElementById("Estado").value=self.sede.Estado;
     }
 
     //Función que obtiene todas las espacio_fisicoes
@@ -93,10 +93,7 @@ angular.module('oikosClienteApp')
 
     //Función para actualizar la información de una aplicación
     self.actualizar = function(row) {
-      //El index indica la posición en la grilla
-      var index = self.gridOptions1.data.indexOf(row);
-      //Contiene el nombre de la sede
-      var nombre = row.Nombre;
+
       var jsonActualizado ={
         Nombre : document.getElementById("Nombre").value,
         Codigo : document.getElementById("Codigo").value,
@@ -106,7 +103,7 @@ angular.module('oikosClienteApp')
 
       //Alerta de cambiar el estado
       swal({
-        title: 'Esta seguro que quiere editar la sede ' + nombre + '?',
+        title: 'Esta seguro que quiere editar la sede ' + jsonActualizado.Nombre + '?',
         text : "OK!",
         type: 'warning',
         showCancelButton: true,
@@ -120,7 +117,7 @@ angular.module('oikosClienteApp')
         //JSON que contiene la información nueva del registro
 
         //Petición que actualiza la información
-        oikosRequest.put('espacio_fisico', row.Id, jsonActualizado)
+        oikosRequest.put('espacio_fisico', self.sede.Id, jsonActualizado)
           .then(function(response) {
             //Respuesta de la petición
             self.ServerResponse = response.data;
