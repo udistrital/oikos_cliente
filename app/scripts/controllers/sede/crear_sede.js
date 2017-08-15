@@ -55,15 +55,17 @@ angular.module('oikosClienteApp')
     self.crear_sede = function(form) {
 
       //Convertir a mayusculas
+      //self.nueva_sede.Id = 1134;
       self.nueva_sede.Nombre = self.nueva_sede.Nombre.toUpperCase();
       self.nueva_sede.Codigo = self.nueva_sede.Codigo.toUpperCase();
 
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nueva_sede).then(function(response) {
-
+        //Obtiene el id del response y lo asigna a nueva sede
         self.nueva_sede.Id = response.data.Id;
-        //Condicional de validación
         console.log(self.nueva_sede);
+
+        //Condicional de validación
         if (response.status == 201) {
           //console.log(self.nueva_sede.Id);
          //For para realizar el post a la tabla espacio_fisico_padre

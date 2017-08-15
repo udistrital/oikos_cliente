@@ -1,78 +1,85 @@
- <!--Vista para consultar las sedes-->
+<!--Vista para consultar las sedes-->
 <div class="container">
   <div class="panel panel-default">
     <div class="panel-heading">
       <strong><center>Consultar sedes</center></strong>
     </div>
     <div class="panel-body">
-      <div style="height: {{gridHeight}}px;" ui-grid="consultarSede.gridOptions1"  align="center" ui-grid-auto-resize></div>
+      <div style="height: {{gridHeight}}px;" ui-grid="consultarSede.gridOptions1" align="center" ui-grid-auto-resize></div>
     </div>
     <div class="panel-footer">
       Las sedes que se han registrado se visualizan en esta tabla.
     </div>
   </div>
-<div>
+  <div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="gestionarEdificios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="gestionarEdificios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title" id="exampleModalLongTitle">Gestionar edificios de la sede</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="exampleModalLongTitle">Gestionar edificios de la sede</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-        </div>
-        <div class="modal-body">
+          </div>
+          <div class="modal-body">
+            <label>Sede:</label>
+            <p>{{consultarSede.sede.Nombre}}</p><br>
+            <label>Sede:</label>
+            <p>{{consultarSede.sede.Codigo}}</p><br>
+            <label>Estado:</label>
+            <p>{{consultarSede.sede.Estado}}</p><br>
+            <label>Edificios asociados: </label>
 
-          <label>Sede:</label><p>{{consultarSede.sede.Nombre}}</p><br>
+            <treecontrol class="tree-classic"
+                        tree-model="consultarSede.dataForTheTree"
+                        options="treeOptions"
+                        on-selection="showSelected(node)"
+                        selected-node="node1"
+                        selected-nodes="desvincular_edificios"
+                        expanded-nodes="expandedNodes">
 
-          <label>Estado:</label><p>{{consultarSede.sede.Estado}}</p><br>
-          <label>Edificios asociados: </label>
+              Edificio: {{node.Hijo.Nombre}}
 
-          <treecontrol class="tree-classic"
-           tree-model="consultarSede.dataForTheTree"
-           options="treeOptions"
-           on-selection="showSelected(node)"
-           selected-node="node1"
-           selected-nodes="menu_x_perfil"
-           expanded-nodes="expandedNodes"
-           >
-
-           Edificio: {{node.Hijo.Nombre}}
-
-          </treecontrol>
-
-        </div>
-        ---------------------------------------------------------------------------
-        <!--Div para cargar los menús de la app que no estan asociadas al perfil-->
-        <div class="modal-body">
-          <label>Edificios sin sedes asociados: </label>
-           <treecontrol class="tree-classic"
-             tree-model="consultarSede.huerfanos"
-             options="treeOptions"
-             on-selection="showSelected(node)"
-             selected-node="node1"
-             selected-nodes="nuevos_edificios"
-             >
-
-             Edificio: {{node.Nombre}}
             </treecontrol>
 
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" ng-click="consultarSede.guardar_nuevos()">Guardar nuevos</button>
+            <br>
+            <p>*Si desea desvincular edificio(s) asociados la sede, seleccionelo(s) y oprima el boton "Desvincular edificio(s)"</p>
+            <button type="button" class="btn btn-outline btn-danger" ng-click="consultarSede.desvincular_espacio_fisico()">Desvincular edificio(s)</button>
+
+          </div>
+          ---------------------------------------------------------------------------
+          <!--Div para cargar los edificios que no estan asociadas a la sede-->
+          <div class="modal-body">
+            <label>Edificios sin sedes asociados: </label>
+            <treecontrol class="tree-classic"
+                         tree-model="consultarSede.huerfanos"
+                         options="treeOptions"
+                         on-selection="showSelected(node)"
+                         selected-node="node1"
+                         selected-nodes="nuevos_edificios">
+
+              Edificio: {{node.Nombre}}
+            </treecontrol>
+            <br>
+            <p>*Si desea vincular edificio(s) a la sede, seleccionelo(s) y oprima el boton "Vincular edificio"</p>
+            <button type="button" class="btn btn-outline btn-primary" ng-click="consultarSede.guardar_nuevos()">Vincular edificio(s)</button>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
 
-  <!-- Modal -->
-  <div class="modal fade" id="editarSede" tabindex="-1" role="dialog" aria-labelledby="editarSedeTitle" aria-hidden="true">
+    <!-- Modal -->
+    <div class="modal fade" id="editarSede" tabindex="-1" role="dialog" aria-labelledby="editarSedeTitle" aria-hidden="true">
 
+<<<<<<< HEAD
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -96,3 +103,26 @@
       </div>
     </div>
   </div>
+=======
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 class="modal-title" id="editarSedeTitle">Editar información de la sede</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          </div>
+          <div class="modal-body">
+
+            <label>Sede:</label><input>{{consultarSede.sede.Nombre}}</input><br>
+            <label>Código:</label><input>{{consultarSede.sede.Codigo}}</input><br>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+              <button type="button" class="btn btn-primary" ng-click="consultarSede.guardar_nuevos()">Guardar nuevos</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <pre>{{sede.Nombre}}</pre>
+>>>>>>> f3e96fefe3cb52d2ae46900c419f37c31f17b985
