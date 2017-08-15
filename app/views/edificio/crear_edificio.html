@@ -32,23 +32,22 @@
          <!--Boton para enviar datos al formulario-->
           <button type="submit" class="btn btn-outline btn-primary">Confirmar </button>
         </form>
-
       </div>
     </div>
   </div>
 
-  <!--Panel para elegir espacios físicos asociados al edificio-->
+  <!--Panel para elegir la sede a la que pertenecera el edificio-->
   <div class="col-md-6">
     <div class="panel panel-default">
       <!--Cabecera del panel de selección-->
       <div class="panel-heading">
-        <h3 class="panel-title">Espacios Físicos Del Edificio</h3>
+        <h3 class="panel-title">Sedes</h3>
       </div>
       <div class="panel-body">
-          <p>Por favor seleccione los espacios físicos que le pertenecen al edificio.</p>
+          <p>Por favor seleccione la sede a la que pertenecerá el edificio</p>
           <div class="panel-body">
             <!--ComboBox para seleccionar el tipo de espacio físico que se va a consultar-->
-                <label for="filtroTipoEspacio">Tipo Espacio:</label>
+                <!--<label for="filtroTipoEspacio">Tipo Espacio:</label>
                 <select class="form-control"  ng-model="crearEdificio.filtro" ng-options="option.Nombre for option in crearEdificio.tipo_espacio" ng-click="crearEdificio.cargar_tipo()">
                         <option value="">--Elija el tipo de espacio físico a consultar--</option>
                 </select><br>

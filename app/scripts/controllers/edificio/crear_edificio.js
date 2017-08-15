@@ -8,7 +8,7 @@
  * Controller of the oikosClienteApp
  */
 angular.module('oikosClienteApp')
-  .controller('CrearEdificioCtrl', function(oikosRequest, $window) {
+  .controller('CrearEdificioCtrl', function(oikosRequest, $window, $scope) {
 
     //Se utiliza la variable self estandarizada
     var self = this;
@@ -19,6 +19,9 @@ angular.module('oikosClienteApp')
     //Variable que sirve de filtro
     self.filtro = {};
 
+    //Variable que contiene la sede seleccionada
+    self.sedeSeleccionada = {};
+
     //Se crea JSON para el nuevo_edificio
     self.nuevo_edificio = {};
     self.nuevo_edificio.TipoEspacio = {
@@ -28,54 +31,47 @@ angular.module('oikosClienteApp')
     //Creación tabla que carga espacios físicos
     self.gridOptions_espacios_fisicos = {
       enableRowSelection: true,
-      enableRowHeaderSelection: true,
-      enableSelectAll: true,
+      enableRowHeaderSelection: false,
+      enableSelectAll: false,
+      multiSelect:false,
       columnDefs: [{
           field: 'Nombre'
         },
         {
           field: 'Codigo',
           displayName: 'Código'
+        },
+        {
+          field: 'Estado',
+          visible: false
         }
       ],
     };
 
-    //Función que obtiene todas los tipos de espacio
-    oikosRequest.get('tipo_espacio_fisico', $.param({
-        limit: 0,
-        offset: 2
-      }))
-      .then(function(response) {
-        self.tipo_espacio = response.data;
-      });
-
-      //Función que carga de acuerdo al ID del tipo_espacio
-      self.cargar_tipo = function(){
-        //Función que obtiene todas las espacio_fisicos
-        oikosRequest.get('espacio_fisico/EspaciosHuerfanos/'+ self.filtro.Id + '', $.param({
-            limit: 0
-          }))
-          .then(function(response) {
-            console.log(response);
-            //Condicional si la petición arroja NULL
-            if (response.data === null) {
-              console.log("Entro 1")
-              self.gridOptions_espacios_fisicos.data = [];
-              //swal('No se encontraron espacios físicos huerfanos relacionados')
-
-            }else{
-              //Si la petición arroja información la muestra
-              self.gridOptions_espacios_fisicos.data = response.data;
-              console.log("Entro 2")
-            }
-
-          });
+    //Función que obtiene las sedes registradas
+    oikosRequest.get('espacio_fisico/EspaciosHuerfanos/1', $.param({
+      limit: 0
+    })).then(function(response) {
+      self.gridOptions_espacios_fisicos.data = response.data;
       }
+    );
 
+    ///Función que captura los valores seleccionados por el check
+    self.gridOptions_espacios_fisicos.onRegisterApi = function(gridApi) {
+         //set gridApi on scope
+         $scope.gridApi = gridApi;
+         gridApi.selection.on.rowSelectionChanged($scope, function(row) {
+           //Se setea el tipo de espacio correspondiente a la sede
+           row.entity.TipoEspacio = {
+                 Id: 1
+           };
+           self.sedeSeleccionada = row.entity;
+           console.log(self.sedeSeleccionada);
+         });
+    };
 
     //Función para crear el edificio
     self.crear_edificio = function(form) {
-      console.log(self.nuevo_edificio);
 
       //Convertir a mayusculas
       self.nuevo_edificio.Nombre = self.nuevo_edificio.Nombre.toUpperCase();
@@ -83,28 +79,65 @@ angular.module('oikosClienteApp')
 
       //Petición POST
       oikosRequest.post("espacio_fisico", self.nuevo_edificio).then(function(response) {
-        //Notificación de success
-        swal({
-          title: "Registro exitoso",
-          html: "<label>Se insertó correctamente el edificio con los siguientes datos</label><br><br><label><b>Nombre:</b></label> " +
-            self.nuevo_edificio.Nombre + "<br><label><b>Código:</b></label> " + self.nuevo_edificio.Codigo,
-          type: "success",
-          showCancelButton: true,
-          confirmButtonColor: "#449D44",
-          cancelButtonColor: "#2c6bc9",
-          confirmButtonText: "Registrar nuevo edificio",
-          cancelButtonText: "Consultar edificio",
-        }).then(function() {
-            //Si da click lo redirije a crear nuevo edificio
-            $window.location.reload();
-          },
-          function(dismiss) {
-            //Si da click lo redirije a consultar edificio
-            if (dismiss === 'cancel') {
-              //Redirije a consultar el edificio
-              $window.location.href = '#/consultar_edificio';
-            }
-          })
+        //Obtiene el id del response y lo asigna a nueva sede
+        self.nuevo_edificio.Id = response.data.Id;
+
+        //Condicional de validación
+        if (response.status == 201) {
+
+          console.log(self.sedeSeleccionada);
+          console.log(self.nuevo_edificio);
+            //Se realiza la petición POST, para guardar el edificio asociado a la sede
+            oikosRequest.post('espacio_fisico_padre', {
+                "Padre": self.sedeSeleccionada,
+                "Hijo": self.nuevo_edificio
+              }
+            )
+              .then(function(response) {
+                if(response.status == 201){
+                  console.log("Se ha realizado la transacción en la tabla espacio físico padre de forma exitosa");
+                }else{
+                  //Se visualiza cuando no se pudo insertar en la BD
+                  swal(
+                    'Rechazada!',
+                    'Su transacción ha sido rechazada porque se produjo un error a nivel de base de datos al relacionar el edificio con la sede',
+                    'error'
+                  )
+                }
+
+              });
+
+              //Notificación de success
+              swal({
+                title: "Registro exitoso",
+                html: "<label>Se insertó correctamente el edificio con los siguientes datos</label><br><br><label><b>Nombre:</b></label> " +
+                  self.nuevo_edificio.Nombre + "<br><label><b>Código:</b></label> " + self.nuevo_edificio.Codigo,
+                type: "success",
+                showCancelButton: true,
+                confirmButtonColor: "#449D44",
+                cancelButtonColor: "#2c6bc9",
+                confirmButtonText: "Registrar nuevo edificio",
+                cancelButtonText: "Consultar edificio",
+              }).then(function() {
+                  //Si da click lo redirije a crear nuevo edificio
+                  $window.location.reload();
+                },
+                function(dismiss) {
+                  //Si da click lo redirije a consultar edificio
+                  if (dismiss === 'cancel') {
+                    //Redirije a consultar el edificio
+                    $window.location.href = '#/consultar_edificio';
+                  }
+                })
+          }else{
+            //Se visualiza cuando no se pudo insertar en la BD
+            swal(
+              'Rechazada!',
+              'Su transacción ha sido rechazada porque se produjo un error a nivel de base de datos',
+              'error'
+            )
+          }
+
       });
     };
 
