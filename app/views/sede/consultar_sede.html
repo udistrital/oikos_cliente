@@ -76,21 +76,23 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title" id="editarSedeTitle">Editar información de la sede</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+            <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
         </div>
+        
         <div class="modal-body">
-
-          <label>Sede:</label><input>{{consultarSede.sede.Nombre}}</input><br>
-          <label>Código:</label><input>{{consultarSede.sede.Codigo}}</input><br>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-primary" ng-click="consultarSede.guardar_nuevos()">Guardar nuevos</button>
-        </div>
+            <div class="panel panel-default">
+                <div class="panel-heading"><h3>Editar información de la sede</h3></div>
+                <div class="panel-body">
+                  <div class="col-lg-12">
+                      <label>Sede:</label><br><input size="80" value="{{consultarSede.sede.Nombre}}" id="Nombre"></input><br><br>  
+                      <label>Código:</label><br><input size="80" maxlength="30" value="{{consultarSede.sede.Codigo}}" id="Codigo"></input><br><br>
+                      <label>Estado:</label><br><input size="80" value="{{consultarSede.sede.Estado}}" readonly id="Estado"></input><br><br>    
+                  </div>
+                  <div class="col-lg-offset-5">
+                      <button type="button" class="btn btn-primary" ng-click="consultarSede.actualizar(consultarSede.sede)">Guardar</button>
+                  </div>
+                </div>
+            </div>
       </div>
     </div>
   </div>
-    <pre>{{sede.Nombre}}</pre>
