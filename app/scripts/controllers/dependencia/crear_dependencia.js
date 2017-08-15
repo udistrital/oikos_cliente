@@ -31,6 +31,13 @@ angular.module('oikosClienteApp')
    	             }
     };
 
+    //Función que obtiene los tipos de dependencia
+    oikosRequest.get('tipo_dependencia', $.param({
+        limit: 0
+      })).then(function(response) {
+        self.tipo_dependencia = response.data;
+      });
+
     //Función para crear la dependencia
     self.crear_dependencia=function(form){
       console.log(self.nueva_dependencia);

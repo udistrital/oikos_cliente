@@ -10,6 +10,11 @@
       <div class="panel-body">
         <!--Formulario de registro-->
         <form name="formdependencia" ng-submit="formdependencia.$valid && crearDependencia.crear_dependencia(formdependencia)">
+          <!--ComboBox para seleccionar el tipo de dependencia-->
+              <label for="filtroTipoDependencia">Tipo Dependencia:</label>
+              <select class="form-control"  ng-model="crearDependencia.tipo_dependencia" ng-options="option.Nombre for option in crearDependencia.tipo_dependencia"">
+                      <option value="">--Elija el tipo de espacio físico a consultar--</option>
+              </select><br>
           <!--Campo de registro de nombre-->
           <fieldset class="form-group">
             <label for="nombreDependencia">Nombre:</label>
