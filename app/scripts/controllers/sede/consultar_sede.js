@@ -17,7 +17,7 @@ angular.module('oikosClienteApp')
 
     self.sede = {};
 
-    //Se crea
+    //Se crea el esquema del tree
     $scope.treeOptions = {
       multiSelection: true,
       nodeChildren: "Opciones",
@@ -184,25 +184,25 @@ angular.module('oikosClienteApp')
 
           //Función obtener los edificios relacionados a la sede
           oikosRequest.get('espacio_fisico_padre', $.param({
-              query: 'Padre:' + id,
-              limit: 0
-            })).then(function(response) {
-              //Variable que tiene el Id de la relaciÓn a borrar
-              for(var i = 0; i < response.data.length; i++){
-                //Variable que guarda el Id de la relación encontrada
-                self.relacionId = response.data[i].Id;
+            query: 'Padre:' + id,
+            limit: 0
+          })).then(function(response) {
+            //Variable que tiene el Id de la relaciÓn a borrar
+            for (var i = 0; i < response.data.length; i++) {
+              //Variable que guarda el Id de la relación encontrada
+              self.relacionId = response.data[i].Id;
 
-                //Petición para borrar las relaciones
-                oikosRequest.delete('espacio_fisico_padre', self.relacionId)
+              //Petición para borrar las relaciones
+              oikosRequest.delete('espacio_fisico_padre', self.relacionId)
                 .then(function(response) {
-                  if(response.data === 'OK'){
-                    console.log("La relación con id "+ self.relacionId + " se ha borrado exitosamente");
-                  }else{
+                  if (response.data === 'OK') {
+                    console.log("La relación con id " + self.relacionId + " se ha borrado exitosamente");
+                  } else {
                     console.log("No se púdo borrar");
                   }
                 })
-              }
-            });
+            }
+          });
 
 
           //Variable que cambia el estado
@@ -246,18 +246,18 @@ angular.module('oikosClienteApp')
 
         })
 
-        //Función obtener los edificios
-        oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
-            limit: 0
-          })).then(function(response) {
-            //Variable que carga el árbol de los EspaciosHuerfanos
-            self.huerfanos = response.data;
-          });
-      };
+      //Función obtener los edificios
+      oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
+        limit: 0
+      })).then(function(response) {
+        //Variable que carga el árbol de los EspaciosHuerfanos
+        self.huerfanos = response.data;
+      });
+    };
 
 
-      //Función para vincular nuevos edificios
-      self.guardar_nuevos = function() {
+    //Función para vincular nuevos edificios
+    self.guardar_nuevos = function() {
 
       //For para realizar el post a la tabla perfil_x_menu_opcion
       for (var i = 0; i < $scope.nuevos_edificios.length; i++) {
@@ -272,16 +272,12 @@ angular.module('oikosClienteApp')
             if (response.data === 'pq: duplicate key value violates unique constraint "PK_ESPACIO_FISICO_PADRE"') {
               console.log($scope.nuevos_edificios[i]);
               //sweetalert2 que indica que el menú ya se encuentra agregado
-              swal('El edificio <label><b>' + $scope.nuevos_edificios.Nombre + '</b></label> ya se encuentra asociado a la sede','Valide la información','error')
+              swal('El edificio <label><b>' + $scope.nuevos_edificios.Nombre + '</b></label> ya se encuentra asociado a la sede', 'Valide la información', 'error')
               //alert("El menú " + $scope.nombre_menu + "</b> ya se encuentra asociado al perfil");
             } else {
               //sweetalert2 que indica el nombre del menú que acabo de vincular
-              swal('Correcto','Los edificios se han vinculado a la sede satisfactoriamente','success')
-            }
-          });
-        }
+              swal('Correcto', 'Los edificios se han vinculado a la sede satisfactoriamente', 'success')
               //Cargar los nuevos edificios asociados
-              //Obtiene los menús asociados a ese perfil
               //Obtiene los edificios asociados a la sede
               oikosRequest.get('espacio_fisico_padre/', $.param({
                   query: "Padre:" + self.sede.Id + "",
@@ -298,17 +294,72 @@ angular.module('oikosClienteApp')
 
                 })
 
-                //Función obtener los edificios
-                oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
-                    limit: 0
-                  })).then(function(response) {
-                    //Variable que carga el árbol de los EspaciosHuerfanos
-                    self.huerfanos = response.data;
-                  });
-            //else}
-        //  });
-      //for}
+              //Función obtener los edificios
+              oikosRequest.get('espacio_fisico/EspaciosHuerfanos/2', $.param({
+                limit: 0
+              })).then(function(response) {
+                //Variable que carga el árbol de los EspaciosHuerfanos
+                self.huerfanos = response.data;
+              });
+            }
+          });
+      }
     };
+
+
+    //Función para desvincular edificios de la sede
+    self.desvincular_espacio_fisico = function() {
+      //Validación de selección de edificios
+      if ($scope.desvincular_edificios.length == 0) {
+        swal('No ha seleccionado ningún edificio para desvincular',
+          'Seleccione el edificio o los edificios a desvincular',
+          'error'
+        )
+      } else {
+        swal({
+          title: '¿Desea desvincular el edificio o edificios seleccionados?',
+          text: "Verifique que los edificio seleccionados son los que desea desvincular",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí'
+        }).then(function() {
+          //For que permite recorrer el arreglo de los edificios a desvincular
+          for (var i = 0; i < $scope.desvincular_edificios.length; i++) {
+
+            //Petición que elimina la asociaciÓn entre la sede y el edificio
+            oikosRequest.delete('espacio_fisico_padre', $scope.desvincular_edificios[i].Id)
+              .then(function(response) {
+                //Condicional
+                if (response.data === "OK") {
+                  swal('Edificio(s) desvinculado(s)!', 'El/los edificio(s) se han desvinculado de la sede correctamente.', 'success')
+
+                  //Obtiene los edificios asociados a la sede
+                  oikosRequest.get('espacio_fisico_padre/', $.param({
+                      query: "Padre:" + self.sede.Id + "",
+                      limit: 0
+                    }))
+                    .then(function(response) {
+                      //Se asigna a esta variable la data cargada
+                      self.dataForTheTree = response.data;
+
+                      //Condicional que impide que al cargar una sede sin hijos quede con este valor
+                      if (self.dataForTheTree === null) {
+                        self.dataForTheTree = {};
+                      };
+
+                    })
+
+
+                } else {
+                  swal('No se ha podido desvincular el menú', 'Valide la información', 'cancel')
+                }
+              })
+          }
+        });
+      }
+    }; //Cierra la función borrar()
 
     /*Función para limpiar todos los campos del formulario con el botón "Cancelar"*/
     self.reset = function(form) {
