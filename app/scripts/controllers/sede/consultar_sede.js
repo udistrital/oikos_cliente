@@ -75,7 +75,7 @@ angular.module('oikosClienteApp')
 
     //Funcion para abrir el modal
     self.abrir_modal_editar = function(row){
-      
+
       self.sede = row.entity;
       document.getElementById("Nombre").value=self.sede.Nombre;
       document.getElementById("Codigo").value=self.sede.Codigo;
@@ -94,16 +94,21 @@ angular.module('oikosClienteApp')
     //Función para actualizar la información de una aplicación
     self.actualizar = function(row) {
 
+      var NombreMin = document.getElementById("Nombre").value.toUpperCase();
+      var CodigoMin = document.getElementById("Codigo").value.toUpperCase();
+
+      console.log(NombreMin);
+
       var jsonActualizado ={
-        Nombre : document.getElementById("Nombre").value,
-        Codigo : document.getElementById("Codigo").value,
+        Nombre : NombreMin,
+        Codigo : CodigoMin,
         Estado : document.getElementById("Estado").value,
         TipoEspacio:{Id : 1}
       };
 
       //Alerta de cambiar el estado
       swal({
-        title: 'Esta seguro que quiere editar la sede ' + jsonActualizado.Nombre + '?',
+        title: 'Esta seguro que quiere editar la sede ' + self.sede.Nombre + '?',
         text : "OK!",
         type: 'warning',
         showCancelButton: true,
@@ -124,7 +129,7 @@ angular.module('oikosClienteApp')
             //SweetAlert
             swal({
               title:'Editado!',
-              text: 'La sede ha sido editada exitosamente.', 
+              text: 'La sede ha sido editada exitosamente.',
               type:'success',
               confirmButtonColor: '#3085d6',
               confirmButtonClass: 'btn btn-success',

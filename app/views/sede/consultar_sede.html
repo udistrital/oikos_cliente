@@ -87,14 +87,26 @@
             <div class="panel panel-default">
                 <div class="panel-heading"><h3>Editar información de la sede</h3></div>
                 <div class="panel-body">
-                  <div class="col-lg-12">
-                      <label>Sede:</label><br><input size="80" id="Nombre" style="text-transform:uppercase"></input><br><br>
-                      <label>Código:</label><br><input size="80" maxlength="30" id="Codigo" style="text-transform:uppercase"></input><br><br>
-                      <label>Estado:</label><br><input size="80"  readonly id="Estado" style="text-transform:uppercase"></input><br><br>
-                  </div>
-                  <div class="col-lg-offset-5">
-                      <button type="button" class="btn btn-primary" ng-click="consultarSede.actualizar()">Guardar</button>
-                  </div>
+                  <!--Formulario de registro-->
+                  <form name="formactualizarsede" ng-submit="formactualizarsede.$valid">
+                    <!--Campo de edición de nombre-->
+                    <fieldset class="form-group">
+                      <label for="nombreSede">Nombre:</label>
+                      <input type="text" style="text-transform:uppercase" class="form-control" id="Nombre" maxlength="130" required>
+                    </fieldset>
+                    <!--Campo de edición de código-->
+                    <fieldset class="form-group">
+                      <label for="codigoSede">Código:</label>
+                      <input type="text" style="text-transform:uppercase" class="form-control" id="Codigo" maxlength="30" required>
+                    </fieldset>
+                    <!--Campo de edición de estado -->
+                    <fieldset class="form-group">
+                      <label for="estadoSede">Estado:</label>
+                      <input type="text" readonly class="form-control" id="Estado" maxlength="70" required>
+                    </fieldset>
+                   <!--Boton para enviar datos al formulario-->
+                     <button type="submit" class="btn btn-outline btn-primary" ng-click="consultarSede.actualizar()">Guardar cambios</button>
+                  </form>
                 </div>
             </div>
       </div>
