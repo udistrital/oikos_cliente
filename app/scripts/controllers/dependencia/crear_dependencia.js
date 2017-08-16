@@ -122,13 +122,4 @@ angular.module('oikosClienteApp')
                 }
               });
             };
-
-        
-          
-
-
-   
-
-
-
 });
