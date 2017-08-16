@@ -15,7 +15,7 @@ angular.module('oikosClienteApp')
     self.nueva_dependencia = {};
     //Se crea JSON para la relación dependencia_tipo_dependencia
     self.relacion_dependencia = {};
-    //Tiene la dependencia padre 
+    //Tiene la dependencia padre
     $scope.dependencia_padre = {};
 
     //Se define la variable de TreeControl
@@ -62,29 +62,27 @@ angular.module('oikosClienteApp')
       console.log(self.nueva_dependencia);
       //Convertir a mayusculas
       self.nueva_dependencia.Nombre = self.nueva_dependencia.Nombre.toUpperCase();
-      self.nueva_dependencia.Telefono = self.nueva_dependencia.Telefono.toUpperCase();
-      self.nueva_dependencia.Correo = self.nueva_dependencia.Correo.toUpperCase();
+      self.nueva_dependencia.TelefonoDependencia = self.nueva_dependencia.TelefonoDependencia.toUpperCase();
+      self.nueva_dependencia.CorreoElectronico = self.nueva_dependencia.CorreoElectronico.toUpperCase();
       //Petición POST
       oikosRequest.post("dependencia", self.nueva_dependencia)
       .then(function(response){
 
         if(response.status === 201){
           //Se guarda en el objeto dependencia en relacion_dependencia
-          self.relacion_dependencia.Id = 327;
           self.nueva_dependencia.Id = response.data.Id;
-          self.relacion_dependencia.Dependencia = self.nueva_dependencia;
-          console.log(self.relacion_dependencia.Dependencia);
+          self.relacion_dependencia.DependenciaId = self.nueva_dependencia;
           console.log(self.relacion_dependencia);
-          
-          /*//Crea la relación de la dependencia con tipo dependencia
+
+          //Crea la relación de la dependencia con tipo dependencia
           oikosRequest.post("dependencia_tipo_dependencia", self.relacion_dependencia).
           then(function(response){
             console.log("Se creo la relación de la dependencia con el tipo dependencia");
-          });*/
+          });
 
           if($scope.dependencia_padre.length === 0){
             console.log("La dependencia creada no asocio ningun padre")
-          }else{  
+          }else{
              //Crea la relación de la dependencia con tipo dependencia
               oikosRequest.post("dependencia_padre", {
                 "Padre": $scope.dependencia_padre,
@@ -95,14 +93,14 @@ angular.module('oikosClienteApp')
                 }else{
                   console.log("Debido a un error no se puedo crear la relacion dependencia padre");
                 }
-            });            
+            });
            };
                 //Notificación de success
                 swal({
                   title: "Registro exitoso",
                   html: "<label>Se insertó correctamente la dependencia con los siguientes datos</label><br><br><label><b>Nombre:</b></label> "
-                  + self.nueva_dependencia.Nombre+"<br><label><b>Télefono:</b></label> " + self.nueva_dependencia.Telefono +
-                  "<br><label><b>Correo electrónico:</b></label>" + self.nueva_dependencia.Correo,
+                  + self.nueva_dependencia.Nombre+"<br><label><b>Télefono:</b></label> " + self.nueva_dependencia.TelefonoDependencia +
+                  "<br><label><b>Correo electrónico:</b></label>" + self.nueva_dependencia.CorreoElectronico,
                   type: "success",
                   showCancelButton: true,
                   confirmButtonColor: "#449D44",

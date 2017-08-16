@@ -12,7 +12,7 @@
         <form name="formdependencia" ng-submit="formdependencia.$valid && crearDependencia.crear_dependencia(formdependencia)">
           <!--ComboBox para seleccionar el tipo de dependencia-->
               <label>Tipo Dependencia:</label>
-              <select class="form-control" ng-model="crearDependencia.relacion_dependencia.TipoDependencia" ng-options="option.Nombre for option in crearDependencia.tipo_dependencia" required>
+              <select class="form-control" ng-model="crearDependencia.relacion_dependencia.TipoDependenciaId" ng-options="option.Nombre for option in crearDependencia.tipo_dependencia" required>
                       <option value="">--Elija el tipo de dependencia que va a crear--</option>
               </select><br>
 
@@ -24,12 +24,12 @@
           <!--Campo de registro de télefono-->
           <fieldset class="form-group">
             <label for="telefonoDependencia">Télefono:</label>
-            <input type="text" style="text-transform:uppercase" class="form-control" id="telefonoDependencia" placeholder="Ingresa el télefono correspondiente a la dependencia" ng-model="crearDependencia.nueva_dependencia.Telefono" maxlength="500" required>
+            <input type="text" style="text-transform:uppercase" class="form-control" id="telefonoDependencia" placeholder="Ingresa el télefono correspondiente a la dependencia" ng-model="crearDependencia.nueva_dependencia.TelefonoDependencia" maxlength="500" required>
           </fieldset>
           <!--Campo de registro de correo electrónico -->
           <fieldset class="form-group">
             <label for="correoDependencia">Correo electrónico:</label>
-            <input type="email" class="form-control" id="correoDependencia" placeholder="INGRESA EL CORREO ELECTRONICO DE LA DEPENDENCIA" ng-model="crearDependencia.nueva_dependencia.Correo" maxlength="70" required>
+            <input type="email" class="form-control" id="correoDependencia" placeholder="INGRESA EL CORREO ELECTRONICO DE LA DEPENDENCIA" ng-model="crearDependencia.nueva_dependencia.CorreoElectronico" maxlength="70" required>
           </fieldset>
          <!--Boton para enviar datos al formulario-->
           <button type="submit" class="btn btn-outline btn-primary" >Confirmar</button>
@@ -50,7 +50,7 @@
           <p>Por favor seleccione el padre de la dependencia.</p>
           <div class="panel-body">
             <button type="submit" ng-click="crearDependencia.visualizar_dependencias()" class="btn btn-outline btn-success">Ver árbol de dependencias</button><br>
-            <br>  
+            <br>
             <!--Pinta las dependencias según el organigrama de la Universidad Distrital-->
               <!--Seleccionar menús relacionados con la aplicación-->
                        <treecontrol class="tree-classic"
@@ -66,4 +66,3 @@
       </div>
   </div>
   </div>
-<pre>{{dependencia_padre}}</pre>
