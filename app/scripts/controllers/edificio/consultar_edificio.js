@@ -47,18 +47,9 @@ angular.module('oikosClienteApp')
           cellTemplate: '<button title="Activar/Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarEdificio.cambiarEstado(row)">' +
             '<i class="fa fa-exchange"></i></button>&nbsp;' +
             '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarEdificio.abrir_modal_editar(row)" data-toggle="modal" data-target="#editarEdificio">' +
-            '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Gestionar espacios físicos" type="button" class="btn btn-primary btn-circle"' +
-            'ng-click="grid.appScope.visualizar(row);grid.appScope.showAdvanced($event, row)" data-toggle="modal" data-target="#exampleModalLong""><i class="glyphicon glyphicon-eye-open"></i></button>'
-
-          /*Para incluir funcionalidad de nuevos botnos y hacer llamado de modal
-          '<center>' +
-            '<a class="ver" ng-click="grid.appScope.d_opListarTodas.op_detalle(row,\'ver\')" >' +
-            '<i class="fa fa-eye fa-lg" aria-hidden="true" data-toggle="tooltip" title=""></i></a> ' +
-            '<a class="editar" ng-click="grid.appScope.TiposAvance.load_row(row,\'edit\');" data-toggle="modal" data-target="#myModal">' +
-            '<i data-toggle="tooltip" title="" class="fa fa-cog fa-lg" aria-hidden="true"></i></a> ' +
-            '<a class="borrar" ng-click="grid.appScope.TiposAvance.load_row(row,\'delete\');" data-toggle="modal" data-target="#myModal">' +
-            '<i data-toggle="tooltip" title="" class="fa fa-trash fa-lg" aria-hidden="true"></i></a>' +
-            '</center>',*/
+            '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' 
+            /*+ '<button title="Gestionar relación a sede" type="button" class="btn btn-primary btn-circle"' +
+            'ng-click="grid.appScope.visualizar(row);" data-toggle="modal" data-target="#gestionarRelacion""><i class="glyphicon glyphicon-eye-open"></i></button>'*/
         }
 
       ]
@@ -83,18 +74,21 @@ angular.module('oikosClienteApp')
       });
 
       self.actualizar = function() {
-        //El index indica la posición en la grilla        
-        //Contiene el nombre de la sede
-        var jsonActualizado ={
-          Nombre : document.getElementById("Nombre").value.toUpperCase(),
-          Codigo : document.getElementById("Codigo").value.toUpperCase(),
-          Estado : document.getElementById("Estado").value.toUpperCase(),
-          TipoEspacio:{Id : 2}
-        };
+      //Variables en las que se pasa a Mayusculas los valores de Nombre y Código    
+      var NombreMin = document.getElementById("Nombre").value.toUpperCase();
+      var CodigoMin = document.getElementById("Codigo").value.toUpperCase();
+
+      //JSON con la información editada  
+      var jsonActualizado ={
+        Nombre : NombreMin,
+        Codigo : CodigoMin,
+        Estado : document.getElementById("Estado").value,       
+        TipoEspacio:{Id : 2}
+      };
   
         //Alerta de cambiar el estado
         swal({
-          title: 'Esta seguro que quiere editar el edificio ' + jsonActualizado.Nombre + '?',
+          title: 'Esta seguro que quiere editar el edificio ' + self.edificio.Nombre + '?',
           text : "OK!",
           type: 'warning',
           showCancelButton: true,
@@ -115,12 +109,13 @@ angular.module('oikosClienteApp')
               //SweetAlert
               swal({
                 title:'Editado!',
-                text: 'El edificio ha sido editada exitosamente.', 
+                text: 'El edificio ha sido editado exitosamente.', 
                 type:'success',
                 confirmButtonColor: '#3085d6',
                 confirmButtonClass: 'btn btn-success',
             }).then(function(){
               $('#editarEdificio').modal('toggle');
+
                   //Función que obtiene todas las espacio_fisicoes
             oikosRequest.get('espacio_fisico', $.param({
               query: "TipoEspacio:2",
@@ -151,6 +146,8 @@ angular.module('oikosClienteApp')
       var nombre = row.entity.Nombre;
       //Variable que tiene el estado  del edificio
       var estado = row.entity.Estado;
+      //Variable que tiene el Id del edificio
+      var id = row.entity.Id;
 
       //Condicional que permite cambiar el estado
       if (estado == 'Inactivo') {
@@ -198,6 +195,28 @@ angular.module('oikosClienteApp')
           confirmButtonClass: 'btn btn-success',
           cancelButtonClass: 'btn btn-danger',
         }).then(function() {
+
+          //Función obtener los edificios relacionados a la sede
+          oikosRequest.get('espacio_fisico_padre', $.param({
+            query: 'Hijo:' + id,
+            limit: 0
+          })).then(function(response) {
+            //Variable que tiene el Id de la relaciÓn a borrar
+            for (var i = 0; i < response.data.length; i++) {
+              //Variable que guarda el Id de la relación encontrada
+              self.relacionId = response.data[i].Id;
+
+              //Petición para borrar las relaciones
+              oikosRequest.delete('espacio_fisico_padre', self.relacionId)
+                .then(function(response) {
+                  if (response.data === 'OK') {
+                    console.log("La relación con id " + self.relacionId + " se ha borrado exitosamente");
+                  } else {
+                    console.log("No se púdo borrar");
+                  }
+                })
+            }
+          });
 
           //Variable que cambia el estado
           row.entity.Estado = 'Inactivo';
