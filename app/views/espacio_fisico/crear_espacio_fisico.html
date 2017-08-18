@@ -36,6 +36,13 @@
                       <option value="Inactivo">Inactivo</OPTION>
            </select>
          </fieldset>
+         <!--ComboBox de registro de uso que tendra el espacio físico-->
+         <fieldset class="form-group">
+          <label for="usoEspacio">Uso:</label>
+          <select  class="form-control" ng-model="crearEspacioFisico.seleccion_uso.TipoUsoId" ng-options="option.Nombre for option in crearEspacioFisico.uso" required>
+                    <option value="">--Elija el uso que tendrá el espacio físico--</option>    
+         </select>
+       </fieldset>
          <!--Boton para enviar datos al formulario-->
           <button type="submit" class="btn btn-outline btn-primary">Confirmar </button>
         </form>
@@ -49,17 +56,19 @@
     <div class="panel panel-default">
       <!--Cabecera del panel de selección-->
       <div class="panel-heading">
-        <h3 class="panel-title">*Seleccione espacio físico padre si es necesario</h3>
+        <h3 class="panel-title">Seleccione el edificio de la sede a relacionar con el espacio físico </h3>
       </div>
       <div class="panel-body">
 
-            <!--ComboBox para seleccionar el tipo de espacio físico que se va a consultar-->
-                <label for="filtroTipoEspacio">Tipo Espacio:</label>
-                <select class="form-control"  ng-model="crearEspacioFisico.filtro" ng-options="option.Nombre for option in crearEspacioFisico.tipo_espacio" ng-click="crearEspacioFisico.cargar_tipo()">
-                        <option value="">--Elija el tipo de espacio físico a consultar--</option>
+            <!--ComboBox para seleccionar la sede del edificio que se va a consultar-->
+            <fieldset class="form-group"> 
+                <label for="tfiltroSede">Sede:</label>
+                <select class="form-control"  ng-model="crearEspacioFisico.filtroSede" ng-options="option.Nombre for option in crearEspacioFisico.sedes" ng-click="crearEspacioFisico.cargar_edificios()">
+                        <option value="">--Elija la sede a la que pertenece el edificio--</option>
                 </select><br>
+            </fieldset>
             <!--Tabla de selección de edificios-->
-            <div style="height: {{gridHeight}}px;" ui-grid="crearEspacioFisico.gridOptions_espacios_fisicos" ui-grid-selection ui-grid-auto-resize></div>
+            <div style="height: {{gridHeight}}px;" ui-grid="crearEspacioFisico.gridOptions_edificios" ui-grid-selection ui-grid-auto-resize></div>
 
       </div>
   </div>
