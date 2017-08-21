@@ -17,3 +17,41 @@
     </div>
   </div>
 <div>
+
+  <!-- Modal para editar el espacio físico -->
+  <div class="modal fade" id="editarEspacioFisico" tabindex="-1" role="dialog" aria-labelledby="editarEspacioFisicoTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
+          </div>
+  
+          <div class="modal-body">
+              <div class="panel panel-default">
+                  <div class="panel-heading"><h3>Editar información del espacio físico</h3></div>
+                  <div class="panel-body">
+                    <!--Formulario de registro-->
+                    <form name="formactualizarespaciofisico" ng-submit="formactualizarespaciofisico.$valid">
+                      <!--Campo de edición de nombre-->
+                      <fieldset class="form-group">
+                        <label for="nombreEspacio">Nombre:</label>
+                        <input type="text" style="text-transform:uppercase" class="form-control" id="Nombre" maxlength="130" required>
+                      </fieldset>
+                      <!--Campo de edición de código-->
+                      <fieldset class="form-group">
+                        <label for="codigoEspacio">Código:</label>
+                        <input type="text" style="text-transform:uppercase" class="form-control" id="Codigo" maxlength="30" required>
+                      </fieldset>
+                      <!--Campo de edición de estado -->
+                      <fieldset class="form-group">
+                        <label for="estadoEspacio">Estado:</label>
+                        <input type="text" readonly class="form-control" id="Estado" maxlength="70" required>
+                      </fieldset>
+                     <!--Boton para enviar datos al formulario-->
+                       <button type="submit" class="btn btn-outline btn-primary" ng-click="consultarEspacioFisico.actualizar()">Guardar cambios</button>
+                    </form>
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
