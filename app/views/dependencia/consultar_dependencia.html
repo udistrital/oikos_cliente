@@ -4,10 +4,53 @@
       <strong><center>Consultar Dependencias</center></strong>
     </div>
     <div class="panel-body">
+      <label for="filtroTipoDependencia">Tipo Dependencia:</label>
+      <select class="form-control"  ng-model="consultarDependencia.filtro" ng-options="option.Nombre for option in consultarDependencia.tipo_dependencia" ng-click="consultarDependencia.cargar_tipo()">
+              <option value="">--Elija el tipo de dependencia a consultar--</option>
+      </select><br>
       <div style="height: {{gridHeight}}px;" ui-grid="consultarDependencia.gridOptions1" align='center' ui-grid-auto-resize></div>
     </div>
     </div>
     <div class="panel-footer">
-      Los edificios que se han registrado se visualizan en esta tabla.
+      Las dependencias que se han registrado se visualizan en esta tabla.
     </div>
   </div>
+
+   <!-- Modal para editar la dependencia -->
+   <div class="modal fade" id="editarDependencia" tabindex="-1" role="dialog" aria-labelledby="editarDependenciaTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
+          </div>
+  
+          <div class="modal-body">
+              <div class="panel panel-default">
+                  <div class="panel-heading"><h3>Editar información de la dependencia</h3></div>
+                  <div class="panel-body">
+                    <!--Formulario de registro-->
+                    <form name="formactualizardependencia" ng-submit="formactualizardependencia.$valid">
+                      <!--Campo de edición de nombre-->
+                      <fieldset class="form-group">
+                        <label for="nombreDependencia">Nombre:</label>
+                        <input type="text" style="text-transform:uppercase" class="form-control" id="Nombre" maxlength="130" required>
+                      </fieldset>
+                      <!--Campo de edición de telefono-->
+                      <fieldset class="form-group">
+                        <label for="telefonoDependencia">Código:</label>
+                        <input type="text" style="text-transform:uppercase" class="form-control" id="Telefono" maxlength="30" required>
+                      </fieldset>
+                      <!--Campo de edición de estado -->
+                      <fieldset class="form-group">
+                        <label for="correoDependencia">Estado:</label>
+                        <input type="email" style="text-transform:uppercase" class="form-control" id="Correo" maxlength="70" required>
+                      </fieldset>
+                     <!--Boton para enviar datos al formulario-->
+                       <button type="submit" class="btn btn-outline btn-primary" ng-click="consultarDependencia.actualizar()">Guardar cambios</button>
+                    </form>
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
+

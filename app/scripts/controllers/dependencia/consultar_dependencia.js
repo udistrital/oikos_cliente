@@ -15,6 +15,9 @@ angular.module('oikosClienteApp')
     //Se utiliza la variable self estandarizada
     var self=this;
 
+    //Variable que contiene el tipo de dependencia
+    self.tipo_dependencia = {};
+
     //Creación tabla
     self.gridOptions1 = {
       enableSorting: true,
@@ -22,54 +25,122 @@ angular.module('oikosClienteApp')
       resizable: true,
       columnDefs: [
         {
-          field: 'Nombre',
+          field: 'DependenciaId.Nombre',
           cellTemplate: tmpl,
+          displayName: 'Nombre dependencia',
           sort: {
             direction: uiGridConstants.ASC,
             priority: 1
           }
         },
         {
-          field: 'TelefonoDependencia',
+          field: 'DependenciaId.TelefonoDependencia',
           cellTemplate: tmpl,
           displayName: 'Teléfono'
         },
         {
-          field: 'CorreoElectronico',
+          field: 'DependenciaId.CorreoElectronico',
           cellTemplate: tmpl,
           displayName: 'Correo Electrónico'
         },
         {
           field: 'Acciones',
-          cellTemplate: '<button title="Inactivar" class="btn btn-danger btn-circle" ng-click="grid.appScope.consultarDependencia.deleteRow(row)"><i class="fa fa-times"></i></button>&nbsp;<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarDependencia.actualizar(row)"><i class="glyphicon glyphicon-pencil"></i></button>'
+          cellTemplate: '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarDependencia.abrir_modal_editar(row)" data-toggle="modal" data-target="#editarDependencia">' +
+          '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;'
         }
       ]
     };
 
-    //Función que obtiene todas las dependenciaes
-    oikosRequest.get('dependencia', $.param({
-        limit: 0
+     //Función que obtiene todos las dependencia de acuerdo al tipo
+     oikosRequest.get('tipo_dependencia', $.param({
+        limit: -1
       }))
       .then(function(response) {
-        self.gridOptions1.data = response.data;
+        self.tipo_dependencia = response.data;
       });
 
-    //Función para actualizar la información de una aplicación
-    self.actualizar = function(row) {
-      //El index indica la posición en la grillas
-      var index = self.gridOptions1.data.indexOf(row.entity);
-      //Permite que la fila del index, sea editable
-      self.gridOptions1.data[index].editable = !self.gridOptions1.data[index].editable;
-
-      console.log("Entro a editar");
-
-      var jsonActualizado = row.entity;
-      oikosRequest.put('dependencia', self.gridOptions1.Id, jsonActualizado)
+    //Función que carga de acuerdo al ID del tipo_espacio
+    self.cargar_tipo = function(){
+      //Función que obtiene los espacio_fisicos de acuerdo al tipo
+      oikosRequest.get('dependencia_tipo_dependencia', $.param({
+          query: "TipoDependenciaId:" + self.filtro.Id + "",
+          limit: 0
+        }))
         .then(function(response) {
+          self.gridOptions1.data = response.data;
+        });
+    };
+
+    //Funcion para abrir el modal
+    self.abrir_modal_editar = function(row){
+      self.dependencia = row.entity.DependenciaId;
+      console.log(self.dependencia);
+      document.getElementById("Nombre").value=self.dependencia.Nombre;
+      document.getElementById("Telefono").value=self.dependencia.TelefonoDependencia;
+      document.getElementById("Correo").value=self.dependencia.CorreoElectronico;
+    };
+
+    //Función para actualizar la información de una dependencia
+   self.actualizar = function(row) {
+    //Variables que se obtienen de los campos Nombre y Teléfono
+    var NombreMin = document.getElementById("Nombre").value.toUpperCase();
+    var TelefonoMin = document.getElementById("Telefono").value.toUpperCase();
+    var CorreoMin = document.getElementById("Correo").value.toUpperCase();
+
+    //Información actualizada
+    var jsonActualizado ={
+      Nombre : NombreMin,
+      TelefonoDependencia : TelefonoMin,
+      CorreoElectronico : CorreoMin
+    };
+
+    //Alerta de cambiar el estado
+    swal({
+      title: 'Esta seguro que quiere editar la dependencia ' + self.dependencia.Nombre + '?',
+      text : "OK!",
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, editar dependencia!',
+      cancelButtonText: 'No, cancelar!',
+      confirmButtonClass: 'btn btn-success',
+      cancelButtonClass: 'btn btn-danger',
+    }).then(function() {
+      //Petición que actualiza la información
+      oikosRequest.put('dependencia', self.dependencia.Id, jsonActualizado)
+        .then(function(response) {
+          //Respuesta de la petición
           self.ServerResponse = response.data;
+          //SweetAlert
+          swal({
+            title:'Editado!',
+            text: 'La dependencia ha sido editada exitosamente.',
+            type:'success',
+            confirmButtonColor: '#3085d6',
+            confirmButtonClass: 'btn btn-success',
+        }).then(function(){
+          $('#editarDependencia').modal('toggle');
+          //Función que obtiene todas las dependencias de acuerdo al tipo
+          oikosRequest.get('dependencia_tipo_dependencia', $.param({
+            query: "TipoDependenciaId:" + self.filtro.Id,
+            limit: 0
+          }))
+          .then(function(response) {
+            self.gridOptions1.data = response.data;
+          });
         })
 
-    };
+        })
+    }, function(dismiss) {
+      // dismiss can be 'cancel', 'overlay',
+      // 'close', and 'timer'
+      if (dismiss === 'cancel') {
+        swal('Cancelado', 'Se cancelo la acción', 'error')
+      }
+    })
+
+  };
 
     //Función para borrar un registro de la tabla dependencia
     self.deleteRow = function(row) {
