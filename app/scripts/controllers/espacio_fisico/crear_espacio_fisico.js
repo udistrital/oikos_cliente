@@ -18,7 +18,7 @@ angular.module('oikosClienteApp')
     self.sedes = {};
 
     //Variable que contiene la info de la sede seleccionada
-    self.filtroSede = {};
+    //self.filtroSede = {};
 
     //Variable que contiene los tipos de espacios físicos
     self.tipo_espacio = {};
