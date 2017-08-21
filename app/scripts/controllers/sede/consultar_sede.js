@@ -80,9 +80,9 @@ angular.module('oikosClienteApp')
       document.getElementById("Nombre").value=self.sede.Nombre;
       document.getElementById("Codigo").value=self.sede.Codigo;
       document.getElementById("Estado").value=self.sede.Estado;
-    }
+    };
 
-    //Función que obtiene todas las espacio_fisicoes
+    //Función que obtiene todos los espacio_fisicos de acuerdo al tipo
     oikosRequest.get('espacio_fisico', $.param({
         query: "TipoEspacio:1",
         limit: 0
