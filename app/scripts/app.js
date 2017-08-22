@@ -92,6 +92,16 @@ angular
         controller: 'CrearSedeCtrl',
         controllerAs: 'crearSede'
       })
+      .when('/gestionar_tipo_espacio', {
+        templateUrl: 'views/gestionar_tipos/gestionar_tipo_espacio.html',
+        controller: 'GestionarTipoEspacioCtrl',
+        controllerAs: 'gestionarTipoEspacio'
+      })
+      .when('/gestionar_tipo_dependencia', {
+        templateUrl: 'views/gestionar_tipos/gestionar_tipo_dependencia.html',
+        controller: 'GestionarTipoDependenciaCtrl',
+        controllerAs: 'gestionarTipoDependencia'
+      })
       .otherwise({
         redirectTo: '/'
       });

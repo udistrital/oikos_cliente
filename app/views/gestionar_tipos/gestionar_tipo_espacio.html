@@ -1,0 +1,67 @@
+<div class="panel panel-primary panel-body">
+        <!--Cabecera del panel-->
+        <h2 class="page-header text-center">Tipo espacio físico</h2>
+        <!--Panel de registro-->
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Registrar Tipos De Espacios Físicos</h3>
+            </div>
+            <div class="panel-body">
+              <!--Formulario de registro-->
+              <form name="formtipoespacio" ng-submit="formtipoespacio.$valid && gestionarTipoEspacio.crear_tipo_espacio()">
+                <!--Campo de registro de nombre-->
+                <fieldset class="form-group">
+                  <label for="nombreTipoEspacio">Nombre:</label>
+                  <input type="text" style="text-transform:uppercase" class="form-control" id="nombretipoespacio" placeholder="Ingresa el nombre del nuevo tipo de espacio físico" ng-model="gestionarTipoEspacio.nuevo_tipo.Nombre" maxlength="120" required>
+                </fieldset>
+               <!--Boton para enviar datos al formulario-->
+                <button type="submit" class="btn btn-outline btn-primary">Confirmar </button>
+              </form>
+      
+            </div>
+          </div>
+        </div>
+      
+        <!--Panel para consultar los tipos de espacios físicos que hay en la BD-->
+        <div class="col-md-6">
+          <div class="panel panel-default">
+            <!--Cabecera del panel de selección-->
+            <div class="panel-heading">
+              <h3 class="panel-title">Consultar tipos de espacio físico</h3>
+            </div>
+            <div class="panel-body">
+                <!--Tabla que carga todos los tipos de espacios físicos-->
+                <div style="height: {{gridHeight}}px;" ui-grid="gestionarTipoEspacio.gridOptions_tipos" ui-grid-auto-resize align="center"></div>
+            </div>
+        </div>
+        </div>
+
+    <!-- Modal para editar el tipo de espacio -->
+   <div class="modal fade" id="editarTipoEspacio" tabindex="-1" role="dialog" aria-labelledby="editarTipoEspacioTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn btn-outline btn-danger btn-xs pull-right" data-dismiss="modal">&times</button><br>
+            </div>
+    
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h3>Editar información del tipo de espacio físico</h3></div>
+                    <div class="panel-body">
+                      <!--Formulario de registro-->
+                      <form name="formactualizartipo" ng-submit="formactualizartipo.$valid">
+                        <!--Campo de edición de nombre-->
+                        <fieldset class="form-group">
+                          <label for="nombreTipoEspacio">Nombre:</label>
+                          <input style="text-transform:uppercase" type="text" class="form-control" id="Nombre" maxlength="130" required>
+                        </fieldset>
+                       <!--Boton para enviar datos al formulario-->
+                         <button type="submit" class="btn btn-outline btn-primary" ng-click="gestionarTipoEspacio.actualizar()">Guardar cambios</button>
+                      </form>
+                    </div>
+                </div>
+          </div>
+        </div>
+      </div>
+  
