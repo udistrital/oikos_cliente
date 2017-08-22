@@ -60,7 +60,7 @@ angular.module('oikosClienteApp')
     //Función que obtiene todas los tipos de espacio
     oikosRequest.get('tipo_espacio_fisico', $.param({
       limit: 0,
-      offset: 3
+      offset: 1
     })).then(function (response) {
       self.tipo_espacio = response.data;
     });
