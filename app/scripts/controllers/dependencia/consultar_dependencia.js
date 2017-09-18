@@ -46,10 +46,42 @@ angular.module('oikosClienteApp')
         {
           field: 'Acciones',
           cellTemplate: '<button title="Editar" type="button" class="btn btn-success btn-circle" ng-click="grid.appScope.consultarDependencia.abrir_modal_editar(row)" data-toggle="modal" data-target="#editarDependencia">' +
-          '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;'
+          '<i class="glyphicon glyphicon-pencil"></i></button>&nbsp;' + '<button title="Vincular espacios físicos" type="button" class="btn btn-primary btn-circle"' +
+          'ng-click="grid.appScope.consultarDependencia.vincular_espacios(row)" data-toggle="modal" data-target="#vincularEspacios"><i class="glyphicon glyphicon-eye-open"></i></button>'
         }
       ]
     };
+
+    //Tabla que tiene los espacios físicos
+    self.gridOptions_espacios = {
+      enableSorting: true,
+      enableFiltering: true,
+      resizable: true,
+      columnDefs: [
+        {
+          field: 'Nombre',
+          cellTemplate: tmpl,
+          displayName: 'Nombre espacio físico',
+          sort: {
+            direction: uiGridConstants.ASC,
+            priority: 1
+          }
+        },
+        {
+          field: 'Codigo',
+          cellTemplate: tmpl,
+          displayName: 'Código'
+        }
+      ]
+    };
+
+    //Función que obtiene todos las dependencia de acuerdo al tipo
+    oikosRequest.get('espacio_fisico', $.param({
+       limit: -1
+     }))
+     .then(function(response) {
+       self.gridOptions_espacios.data = response.data;
+     });
 
      //Función que obtiene todos las dependencia de acuerdo al tipo
      oikosRequest.get('tipo_dependencia', $.param({
@@ -142,27 +174,19 @@ angular.module('oikosClienteApp')
 
   };
 
-    //Función para borrar un registro de la tabla dependencia
-    self.deleteRow = function(row) {
-      var index = self.gridOptions1.data.indexOf(row.entity);
-
-      //Borra la dependencia de la BD
-      oikosRequest.delete('dependencia', row.entity.Id)
-        .then(function(response) {
-          //Condicional
-          if (response.data === "OK") {
-            alert("La dependencia se ha borrado exitosamente");
-            //Función que obtiene todas las dependencias
-            oikosRequest.get('dependencia', $.param({
-                limit: 0
-              }))
-              .then(function(response) {
-                self.gridOptions1.data = response.data;
-              });
-          } else {
-            alert("No se puede borrar la dependencia");
-          }
-        });
+    //Función para vincular espacios físicos
+    self.vincularEspacios = function(row){
+      console.log("Entro");
+      //Información de la dependencia
+      self.dependencia = row.entity.DependenciaId;
+      //JSON para asignación
+      self.vinculacion = {
+        Estado: "Estado de espacio físico",
+        FechaInicio: "" ,
+        DocumentoSoporte: "Resolución 1",
+        EspacioFisicoId: "2",
+        DependenciaId: self.dependencia
+      };
     };
 
 
