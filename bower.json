@@ -2,37 +2,35 @@
   "name": "oikos-cliente",
   "version": "0.0.0",
   "dependencies": {
-    "angular": "^1.6",
+    "angular": "^1.6.6",
     "bootstrap": "^3.2.0",
     "angular-animate": "^1.6.6",
     "angular-cookies": "^1.6.6",
-    "angular-messages": "^1.6.6",
     "angular-resource": "^1.6.6",
     "angular-route": "^1.6.6",
+    "angular-sanitize": "^1.6.6",
     "angular-touch": "^1.6.6",
-    "angular-ui-grid": "*",
+    "angular-ui-grid":"*",
     "AngularJS-OAuth2": "angularjs-oauth2#^1.2.1",
-    "angular-material": "*",
-    "angular-tree-control": "*",
-    "pdfmake": "*",
+    "angular-material":"*",
+    "angular-tree-control":"*",
+    "pdfmake":"*",
     "ngstorage": "^0.3.11",
     "kjur-jsrsasign": "jsrsasign#^7.0.0",
     "angular-websocket": "^2.0.0",
     "angular-input-masks": "^2.5.0",
     "angular-moment": "^1.0.1",
     "angular-translate": "^2.15.1",
-    "angular-sanitize": "^1.6.3",
-    "sweetalert": "^1.1.3",
-    "sweetalert2": "*",
+    "sweetalert2": "^6.4.4",
     "font-awesome-animation": "^0.0.10",
     "bootstrap-select": "^1.12.2",
     "angular-loading-bar": "^0.9.0"
   },
+  "resolutions": {
+    "angular": "1.6.6"
+  },
   "devDependencies": {
     "angular-mocks": "^1.6.6"
-  },
-  "resolutions": {
-    "angular": "1.6.3"
   },
   "appPath": "app",
   "moduleName": "oikosClienteApp",
