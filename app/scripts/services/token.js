@@ -47,26 +47,29 @@ angular.module('oikosClienteApp')
       header: null,
       token: null,
       //Configuracion de parametros identificacion unica oas-wso2
-      /*
       config: {
-
-        AUTORIZATION_URL: "https://wso2.intranetoas.udistrital.edu.co:9443/oauth2/authorize",
-        CLIENTE_ID: "mEEMLpePonJ91jKYB_s8sbE8slQa",
-        REDIRECT_URL:  "http://10.20.2.52/prototipo/app",
-        RESPONSE_TYPE: "id_token token",
-        SCOPE: "openid profile email",
-        BUTTON_CLASS: "btn btn-outline btn-primary btn-sm"
-      },*/
+                AUTORIZATION_URL: "https://10.20.0.162:9443/oauth2/authorize",
+                CLIENTE_ID: "9jU3PaCRfe9MJIqGNmvQBboXGpMa",
+                REDIRECT_URL: "http://10.20.0.254/oikos",
+                RESPONSE_TYPE: "id_token token",
+                SCOPE: "openid email",
+                BUTTON_CLASS: "btn btn-warning btn-sm",
+                SIGN_OUT_URL: "https://10.20.0.162:9443/oidc/logout",
+                SIGN_OUT_REDIRECT_URL: "http://10.20.0.254/oikos",
+                SIGN_OUT_APPEND_TOKEN: "true"
+            },
       //Configuracion de parametros oidc unica google
-      /*
-      config: {
-        AUTORIZATION_URL: "https://accounts.google.com/o/oauth2/v2/auth",
-        CLIENTE_ID: "794841744026-6p2i7lmiho204r4li2bb1ektd7j9dbd4.apps.googleusercontent.com",
-        REDIRECT_URL: "https://fabianleon.github.io/app",
-        RESPONSE_TYPE: "id_token token",
-        SCOPE: "openid profile email",
-        BUTTON_CLASS: "btn btn-outline btn-primary btn-sm"
-      },*/
+    /*  config: {
+                AUTORIZATION_URL: "https://10.20.0.162:9443/oauth2/authorize",
+                CLIENTE_ID: "pyx_0_U1SJYMaSDfuX_FionhzYka",
+                REDIRECT_URL: "http://localhost:9000/",
+                RESPONSE_TYPE: "id_token token",
+                SCOPE: "openid email",
+                BUTTON_CLASS: "btn btn-warning btn-sm",
+                SIGN_OUT_URL: "https://10.20.0.162:9443/oidc/logout",
+                SIGN_OUT_REDIRECT_URL: "http://localhost:9000/",
+                SIGN_OUT_APPEND_TOKEN: "true"
+            },*/
 
       live_token: function() {
         if (typeof service.local.id_token === 'undefined' || service.local.id_token === null) {
