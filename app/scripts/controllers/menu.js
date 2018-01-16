@@ -18,7 +18,7 @@ angular.module('oikosClienteApp')
 
     //Variables para consumir servicio de menús
     $scope.rol = "Admin Oikos";
-    $scope.app = "Oikos"
+    $scope.app = "Oikos";
 
     $http.get('http://10.20.0.254/configuracion_api/v1/menu_opcion_padre/ArbolMenus/' + $scope.rol + '/' + $scope.app)
        .then(function(response) {
