@@ -12,11 +12,17 @@ angular.module('oikosClienteApp')
 
       // Service logic
     // ...
-    var path = "http://10.20.0.254/oikos_api/v1/";
+    var path = "https://autenticacion.udistrital.edu.co:8244/oikos_api/";
+
+    var cabecera = {
+      headers: {
+        'Authorization': 'Bearer aaf8c00a-a2ac-3989-84b7-6a917986892c'
+      }
+    };
     // Public API here
     return {
       get: function (tabla,params) {
-        return $http.get(path+tabla+"/?"+params);
+        return $http.get(path+tabla+"/?"+params, cabecera);
       },
       post: function (tabla,elemento) {
         return $http.post(path+tabla,elemento);
@@ -29,3 +35,7 @@ angular.module('oikosClienteApp')
       }
     };
   });
+
+
+
+      //curl -X GET --header 'Accept: application/json' --header 'Authorization: Bearer 803847ce-479d-366a-9e3d-7d4e00744f09' 'https://autenticacion.udistrital.edu.co:8244/oikos_api/tipo_uso/?limit=-1'
