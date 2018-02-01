@@ -49,7 +49,7 @@ angular.module('oikosClienteApp')
       //Configuracion de parametros identificacion unica oas-wso2
       config: {
                 AUTORIZATION_URL: "https://10.20.0.162:9443/oauth2/authorize",
-                CLIENTE_ID: "9jU3PaCRfe9MJIqGNmvQBboXGpMa",
+                CLIENTE_ID: "bfPMflsiPVN6WFjJZIpzjsLdlx8a",
                 REDIRECT_URL: "http://10.20.0.254/oikos",
                 RESPONSE_TYPE: "id_token token",
                 SCOPE: "openid email",
