@@ -48,13 +48,13 @@ angular.module('oikosClienteApp')
       token: null,
       //Configuracion de parametros identificacion unica oas-wso2
       config: {
-                AUTORIZATION_URL: "https://10.20.0.162:9443/oauth2/authorize",
-                CLIENTE_ID: "bfPMflsiPVN6WFjJZIpzjsLdlx8a",
+                AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
+                CLIENTE_ID: "Btzl8jY_TMcy0NcRD8Jw1ebsajEa",
                 REDIRECT_URL: "http://10.20.0.254/oikos",
                 RESPONSE_TYPE: "id_token token",
-                SCOPE: "openid email",
+                SCOPE: "openid",
                 BUTTON_CLASS: "btn btn-warning btn-sm",
-                SIGN_OUT_URL: "https://10.20.0.162:9443/oidc/logout",
+                SIGN_OUT_URL: "https://autenticacion.udistrital.edu.co/oidc/logout",
                 SIGN_OUT_REDIRECT_URL: "http://10.20.0.254/oikos",
                 SIGN_OUT_APPEND_TOKEN: "true"
             },
